@@ -1,6 +1,7 @@
 import { degToRad, radToDeg } from "./helper.js";
 import WebGLArticulatedObject from "./WebGLArticulatedObject.js";
 import WebGLObject from "./WebGLObject.js";
+import { Transformation, Frame, Animation } from "./Animation.js";
 
 export function webGLObjectFactory(model, gl, program) {
   // Create the WebGL Object
@@ -22,16 +23,14 @@ export function WebGLArticulatedObjectFactory(articulatedModel, gl, program) {
     gl,
     program
   );
-  articulatedObject.object.translation = articulatedModel.tl_obj;
-  articulatedObject.object.rotation = articulatedModel.rot_obj.map(degToRad);
-  articulatedObject.object.scale = articulatedModel.scale_obj;
-  articulatedObject.object.setTexture(articulatedModel.texture);
+  articulatedObject.object.scale = articulatedModel.scale;
+  articulatedObject.object.setTexture("ENVIRONMENT");
 
   //Set other properties
-  articulatedObject.name = articulatedModel.name;
-  articulatedObject.translation = articulatedModel.tl_subtr;
-  articulatedObject.rotation = articulatedModel.rot_subtr.map(degToRad);
-  articulatedObject.scale = articulatedModel.scale_subtr;
+  articulatedObject.name = articulatedModel.id;
+  articulatedObject.translation = articulatedModel.coordinates;
+  articulatedObject.rotation = articulatedModel.rotation.map(degToRad);
+  articulatedObject.scale = [1, 1, 1];
 
   //Set children
   for (let i = 0; i < articulatedModel.children.length; i++) {
@@ -46,9 +45,6 @@ export function WebGLArticulatedObjectFactory(articulatedModel, gl, program) {
 export function WebGLArticulatedModelFactory(articulatedObject) {
   const articulatedModel = {
     name: articulatedObject.name,
-    tl_obj: articulatedObject.object.translation,
-    rot_obj: articulatedObject.object.rotation.map(radToDeg),
-    scale_obj: articulatedObject.object.scale,
 
     tl_subtr: articulatedObject.translation,
     rot_subtr: articulatedObject.rotation.map(radToDeg),
@@ -71,11 +67,8 @@ export function WebGLArticulatedModelFactory(articulatedObject) {
 
 function TransformationFactory(transformationModel) {
   let transformation = new Transformation();
-  transformation.tr_obj = transformationModel.tr_obj;
   transformation.tr_subtr = transformationModel.tr_subtr;
-  transformation.rot_obj = transformationModel.rot_obj;
   transformation.rot_subtr = transformationModel.rot_subtr;
-  transformation.scale_obj = transformationModel.scale_obj;
   transformation.scale_subtr = transformationModel.scale_subtr;
   return transformation;
 }

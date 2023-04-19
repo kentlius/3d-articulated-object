@@ -13,6 +13,13 @@
         <canvas id="canvas" width="500" height="500"></canvas>
       </div>
       <div class="tools">
+        <h1>Component</h1>
+        <div class="card-content">
+          <div class="card-content-item">
+            <div class="tree" id="tree" > </div>
+            <p class="selected" id="selected">Selected Component: </p>
+          </div>
+        </div>
         <h1>Transformation</h1>
         <div class="card-content">
           <div class="card-content-item">
@@ -23,9 +30,9 @@
                 <input
                   type="range"
                   id="translateX"
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-250"
+                  max="250"
+                  step="1"
                 />
               </div>
               <div>
@@ -33,9 +40,9 @@
                 <input
                   type="range"
                   id="translateY"
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-250"
+                  max="250"
+                  step="1"
                 />
               </div>
               <div>
@@ -43,9 +50,9 @@
                 <input
                   type="range"
                   id="translateZ"
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-250"
+                  max="250"
+                  step="1"
                 />
               </div>
             </div>
@@ -72,15 +79,15 @@
             <div class="sliders">
               <div>
                 <label for="scaleX">X</label>
-                <input type="range" id="scaleX" min="0" max="3" step="0.01" />
+                <input type="range" id="scaleX" min="0" max="5" step="0.01" />
               </div>
               <div>
                 <label for="scaleY">Y</label>
-                <input type="range" id="scaleY" min="0" max="3" step="0.01" />
+                <input type="range" id="scaleY" min="0" max="5" step="0.01" />
               </div>
               <div>
                 <label for="scaleZ">Z</label>
-                <input type="range" id="scaleZ" min="0" max="3" step="0.01" />
+                <input type="range" id="scaleZ" min="0" max="5" step="0.01" />
               </div>
             </div>
           </div>
@@ -123,7 +130,7 @@
             <div class="sliders">
               <div>
                 <label for="radius">Radius</label>
-                <input type="range" id="radius" min="0" max="1" step="0.01" />
+                <input type="range" id="radius" min="1" max="1000" />
               </div>
               <div>
                 <label for="angle">Angle</label>
@@ -175,19 +182,38 @@
               </div>
             </div>
           </div>
+        </div>
+        <h1>Texture</h1>
+        <div class="card-content">
           <div class="card-content-item">
             <div class="sliders">
               <div>
                 <input
-                  type="file"
-                  id="loadedFile"
-                  name="myfile"
-                  accept="application/JSON"
+                  type="radio"
+                  id="custom"
+                  name="texture"
+                  value="custom"
                 />
+                <label for="custom">Custom</label>
               </div>
               <div>
-                <button class="button" id="save">Save</button>
-                <button class="button" id="load">Load</button>
+                <input
+                  type="radio"
+                  id="reflective"
+                  name="texture"
+                  value="reflective"
+                  checked
+                />
+                <label for="reflective">Reflective</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  id="bump"
+                  name="texture"
+                  value="bump"
+                />
+                <label for="bump">Bump</label>
               </div>
             </div>
           </div>
@@ -195,25 +221,15 @@
         <h1>Others</h1>
         <div class="card-content">
           <div class="card-content-item">
-            <div class="sliders">
-              <div>
-                <label for="colorWell">Model Color</label>
-                <input type="color" id="colorWell" />
-              </div>
               <div>
                 <input type="checkbox" id="shading" />
                 <label for="shading">Shading</label>
-              </div>
-              <div>
-                <input type="checkbox" id="animation" />
-                <label for="animation">Animation</label>
               </div>
               <div>
                 <button class="button" id="reset" onclick="location.reload()">
                   Reset
                 </button>
               </div>
-            </div>
           </div>
         </div>
       </div>

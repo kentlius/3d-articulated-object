@@ -48,48 +48,74 @@ export default class WebGLObject {
     let vertexColors = [];
     let vertexTextureCoordinates = [];
 
-    // For each part of the model.
-    for (let i = 0; i < this.model.num_components; i++) {
-      // The component in this models.
-      let component = this.model.components[i];
+    // The component in this models.
+    let component = {
+      num_vertices: 8,
+      vertices: [
+        [100, 100, 100],
+        [-100, 100, 100],
+        [-100, -100, 100],
+        [100, -100, 100],
+        [100, 100, -100],
+        [-100, 100, -100],
+        [-100, -100, -100],
+        [100, -100, -100],
+      ],
+      num_faces: 6,
+      faces: [
+        [0, 1, 2, 3],
+        [5, 4, 7, 6],
+        [4, 0, 3, 7],
+        [1, 5, 6, 2],
+        [0, 4, 5, 1],
+        [2, 6, 7, 3],
+      ],
+      colors: [
+        [255, 0, 0, 255],
+        [255, 0, 0, 255],
+        [255, 0, 0, 255],
+        [255, 0, 0, 255],
+        [255, 0, 0, 255],
+        [255, 0, 0, 255],
+      ],
+    };
 
-      // List of vertices in the component.
-      let vertices = component.vertices;
+    // List of vertices in the component.
+    let vertices = component.vertices;
 
-      // Position and color of each vertex.
-      let positions = [];
-      let colors = [];
-      let textureCoordinates = [];
+    // Position and color of each vertex.
+    let positions = [];
+    let colors = [];
+    let textureCoordinates = [];
 
-      // Mapping each vertex in a face to a position and color.
-      for (let j = 0; j < component.num_faces; j++) {
-        let face = component.faces[j];
+    // Mapping each vertex in a face to a position and color.
+    for (let j = 0; j < component.num_faces; j++) {
+      let face = component.faces[j];
 
-        // Set each vertex position.
-        positions = positions.concat(vertices[face[1]]);
-        positions = positions.concat(vertices[face[2]]);
-        positions = positions.concat(vertices[face[3]]);
-        positions = positions.concat(vertices[face[0]]);
-        positions = positions.concat(vertices[face[1]]);
-        positions = positions.concat(vertices[face[3]]);
+      // Set each vertex position.
+      positions = positions.concat(vertices[face[1]]);
+      positions = positions.concat(vertices[face[2]]);
+      positions = positions.concat(vertices[face[3]]);
+      positions = positions.concat(vertices[face[0]]);
+      positions = positions.concat(vertices[face[1]]);
+      positions = positions.concat(vertices[face[3]]);
 
-        // Set each vertex color.
-        let color_idx = j % component.colors.length;
-        for (let k = 0; k < 6; k++) {
-          colors = colors.concat(component.colors[color_idx]);
-        }
-
-        // Set each vertex texture coordinate.
-        textureCoordinates = textureCoordinates.concat([
-          0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1,
-        ]);
+      // Set each vertex color.
+      let color_idx = j % component.colors.length;
+      for (let k = 0; k < 6; k++) {
+        colors = colors.concat(component.colors[color_idx]);
       }
 
-      vertexPositions = vertexPositions.concat(positions);
-      vertexColors = vertexColors.concat(colors);
-      vertexTextureCoordinates =
-        vertexTextureCoordinates.concat(textureCoordinates);
+      // Set each vertex texture coordinate.
+      textureCoordinates = textureCoordinates.concat([
+        0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1,
+      ]);
     }
+
+    vertexPositions = vertexPositions.concat(positions);
+    vertexColors = vertexColors.concat(colors);
+    vertexTextureCoordinates =
+      vertexTextureCoordinates.concat(textureCoordinates);
 
     // Get the number of vertices.
     let numVertices = vertexPositions.length / 3;

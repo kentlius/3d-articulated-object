@@ -1,0 +1,134 @@
+{
+  "components": [
+    {
+      "id": "base",
+      "color": "#FFFFFF",
+      "texture": "textures/bump.png",
+      "coordinates": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "scale": [1, 1, 0.6],
+      "children": [
+        {
+          "id": "head",
+          "color": "#FF0000",
+          "texture": "textures/bump.png",
+          "coordinates": [0, 125, 0],
+          "rotation": [0, 0, 0],
+          "scale": [0.5, 0.5, 0.5],
+          "children": []
+        },
+        {
+          "id": "right_arm",
+          "color": "#FF0000",
+          "texture": "textures/bump.png",
+          "coordinates": [130, 50, 0],
+          "rotation": [0, 0, 0],
+          "scale": [0.3, 0.6, 0.3],
+          "children": [
+            {
+              "id": "right_hand",
+              "color": "#00FF00",
+              "texture": {
+                "bump": null,
+                "reflective": true,
+                "custom": null
+              },
+              "coordinates": [0, -130, 0],
+              "rotation": [0, 0, 0],
+              "scale": [0.2, 0.8, 0.2],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "left_arm",
+          "color": "#FF0000",
+          "texture": "textures/bump.png",
+          "coordinates": [-130, 50, 0],
+          "rotation": [0, 0, 0],
+          "scale": [0.3, 0.6, 0.3],
+          "children": [
+            {
+              "id": "left_hand",
+              "color": "#00FF00",
+              "texture": {
+                "bump": null,
+                "reflective": true,
+                "custom": null
+              },
+              "coordinates": [0, -130, 0],
+              "rotation": [0, 0, 0],
+              "scale": [0.2, 0.8, 0.2],
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "right_leg",
+          "color": "#0000FF",
+          "texture": "textures/bump.png",
+          "coordinates": [50, -150, 0],
+          "rotation": [0, 0, 0],
+          "scale": [0.4, 1, 0.4],
+          "children": []
+        },
+        {
+          "id": "left_leg",
+          "color": "#0000FF",
+          "texture": "textures/bump.png",
+          "coordinates": [-50, -150, 0],
+          "rotation": [0, 0, 0],
+          "scale": [0.4, 1, 0.4],
+          "children": []
+        }
+      ]
+    }
+  ],
+  "animations": [
+    {
+      "name": "walk",
+      "duration": 1000,
+      "keyframes": [
+        {
+          "time": 0,
+          "transforms": [
+            {
+              "component": "left_leg",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "right_leg",
+              "rotation": [0, 0, 0]
+            }
+          ]
+        },
+        {
+          "time": 500,
+          "transforms": [
+            {
+              "component": "left_leg",
+              "rotation": [0, 0, 45]
+            },
+            {
+              "component": "right_leg",
+              "rotation": [0, 0, 135]
+            }
+          ]
+        },
+        {
+          "time": 1000,
+          "transforms": [
+            {
+              "component": "left_leg",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "right_leg",
+              "rotation": [0, 0, 0]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -79,9 +79,6 @@ export default class WebGLArticulatedObject {
 
   applyFrame(frame, idx = 0) {
     //Applying transformations, deep copy
-    this.object.translation = frame.transformations[idx].tr_obj.map((e) => e);
-    this.object.rotation = frame.transformations[idx].rot_obj.map(degToRad);
-    this.object.scale = frame.transformations[idx].scale_obj.map((e) => e);
     this.translation = frame.transformations[idx].tr_subtr.map((e) => e);
     this.rotation = frame.transformations[idx].rot_subtr.map(degToRad);
     this.scale = frame.transformations[idx].scale_subtr.map((e) => e);
@@ -97,9 +94,6 @@ export default class WebGLArticulatedObject {
   getFrame(toReturn) {
     //Copying reference agar penggantian di UI juga mengganti frame
     let toAdd = new Transformation();
-    toAdd.tr_obj = this.object.translation;
-    toAdd.rot_obj = this.object.rotation.map(radToDeg);
-    toAdd.scale_obj = this.object.scale;
     toAdd.tr_subtr = this.translation;
     toAdd.rot_subtr = this.rotation.map(radToDeg);
     toAdd.scale_subtr = this.scale;
