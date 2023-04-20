@@ -1,7 +1,6 @@
 import { fragmentShaderSource } from "./shaders/fragment-shader.js";
 import { vertexShaderSource } from "./shaders/vertex-shader.js";
 import { ArticulatedObjectRenderer } from "./utils/ArticulatedObjectRenderer.js";
-import person from "../test/model.json" assert { type: "json" };
 import steve from "../test/steve.json" assert { type: "json" };
 import ghast from "../test/ghast.json" assert { type: "json" };
 import snow_golem from "../test/snow_golem.json" assert { type: "json" };
@@ -23,7 +22,7 @@ async function main() {
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   const program = createProgram(gl, vertexShader, fragmentShader);
 
-  let loadModel = person;
+  let loadModel = steve;
   let articulatedObject;
   const articulatedRenderer = new ArticulatedObjectRenderer(gl, program);
 
