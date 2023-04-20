@@ -21,14 +21,11 @@ async function main() {
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
   const program = createProgram(gl, vertexShader, fragmentShader);
-  const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
 
   let loadModel = person;
-  let articulatedObject = WebGLArticulatedObjectFactory(
-    loadModel.components[0],
-    gl,
-    program
-  );
+  let articulatedObject;
+  const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
+
   let component = 0;
   const tree = document.querySelector("#tree");
   const selected = document.querySelector("#selected");
@@ -61,7 +58,7 @@ async function main() {
     requestAnimationFrame(
       articulatedRenderer.drawScene.bind(articulatedRenderer)
     );
-    tree.innerHTML = articulatedRenderer.object.getUI(0, 0);
+    tree.innerHTML = articulatedRenderer.object.generateHTML(0, 0);
     component = 0;
     selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
     translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
@@ -92,8 +89,8 @@ async function main() {
       }
     });
     
-    for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
-      let button = document.querySelector("#AO-" + i);
+    for (let i = 0; i < articulatedRenderer.object.getTotalObj(); i++) {
+      let button = document.querySelector("#Object-" + i);
       button.onclick = () => {
         component = i;
         selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
@@ -145,7 +142,7 @@ async function main() {
   textures.forEach((texture) => {
     texture.addEventListener("change", (event) => {
       // set texture for all components
-      for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
+      for (let i = 0; i < articulatedRenderer.object.getTotalObj(); i++) {
         articulatedRenderer.object.getArticulatedObject(i).object.setTexture(event.target.value.toUpperCase());
       }
     });

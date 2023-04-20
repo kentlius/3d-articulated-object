@@ -1,10 +1,10 @@
-import WebGLObject from "./WebGLObject.js";
+import Object from "./Object.js";
 
-export default class WebGLArticulatedObject {
-  // Struktur tree rekursif
+export default class ArticulatedObject {
+  // Articulated Object Properties
   children = [];
 
-  // TRANSFORMATION PROPERTIES
+  // Transformation Properties
   translation = [0, 0, 0];
   rotation = [0, 0, 0];
   scale = [1, 1, 1];
@@ -12,18 +12,17 @@ export default class WebGLArticulatedObject {
   constructor(gl, program, articulatedModel) {
     this.gl = gl;
     this.program = program;
-    this.object = new WebGLObject(gl, program, articulatedModel.object);
+    this.object = new Object(gl, program, articulatedModel.object);
   }
 
   draw(projection, view, model, cameraPosition, shadingMode) {
-    //Hitung model untuk anak2nya
     let newModel = model.clone();
     newModel.transform(this.translation, this.rotation, this.scale);
 
-    //Gambar object
+    // draw object recursively
+    //draw the object
     this.object.draw(projection, view, newModel, cameraPosition, shadingMode);
-
-    // Draw secara depth first search
+    // draw object's children
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].draw(
         projection,
@@ -35,31 +34,29 @@ export default class WebGLArticulatedObject {
     }
   }
 
-  getUI(depth, dfsId) {
+  generateHTML(depth, id) {
     let toReturn = "<div class='horizontal-box justify-start'>";
     for (let i = 0; i < depth; i++) {
       toReturn += "&nbsp;&nbsp;&nbsp;&nbsp;";
     }
     toReturn +=
-      "<button id='AO-" + dfsId + "'>" + this.name + "</button></div>";
-    dfsId++;
+      "<button id='Object-" + id + "'>" + this.name + "</button></div>";
+    id++;
     for (let i = 0; i < this.children.length; i++) {
-      toReturn += this.children[i].getUI(depth + 1, dfsId);
-      dfsId += this.children[i].getNumObj();
+      toReturn += this.children[i].generateHTML(depth + 1, id);
+      id += this.children[i].getTotalObj();
     }
     return toReturn;
   }
 
-  getArticulatedObject(dfsId) {
-    if (dfsId == 0) {
+  getArticulatedObject(id) {
+    if (id == 0) {
       return this;
     }
-    dfsId--;
+    id--;
     for (let i = 0; i < this.children.length; i++) {
-      //console.log("sebelum", dfsId);
-      let returned = this.children[i].getArticulatedObject(dfsId);
-      dfsId -= this.children[i].getNumObj();
-      //console.log("sesudah", dfsId);
+      let returned = this.children[i].getArticulatedObject(id);
+      id -= this.children[i].getTotalObj();
       if (returned != null) {
         return returned;
       }
@@ -80,10 +77,10 @@ export default class WebGLArticulatedObject {
     return null;
   }
 
-  getNumObj() {
+  getTotalObj() {
     let toReturn = 1;
     for (let i = 0; i < this.children.length; i++) {
-      toReturn += this.children[i].getNumObj();
+      toReturn += this.children[i].getTotalObj();
     }
     return toReturn;
   }
@@ -100,7 +97,7 @@ export default class WebGLArticulatedObject {
     //Applying frame to children
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].applyFrame(frame, idx);
-      idx += this.children[i].getNumObj();
+      idx += this.children[i].getTotalObj();
     }
   }
 

@@ -1,20 +1,3 @@
-// Substract vector a with vector b
-function subtractVectors(a, b) {
-  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-}
-
-// Return the normalize value of the vector v
-function normalize(v) {
-  var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-  // make sure we don't divide by 0.
-  if (length > 0.00001) {
-    return [v[0] / length, v[1] / length, v[2] / length];
-  } else {
-    return [0, 0, 0];
-  }
-}
-
-// Cross product between vector a and vector b
 function cross(a, b) {
   return [
     a[1] * b[2] - a[2] * b[1],
@@ -23,32 +6,41 @@ function cross(a, b) {
   ];
 }
 
-/**
- * Get the normal, tangent, and bitangent vector of all vertices.
- *
- * @param vertexPositions - The vertex position.
- * @returns - The normal, tangent, and bitangent vector of all vertices.
- */
-function getAllVectors(vertexPositions) {
-  const n = vertexPositions.length;
+function subtractVectors(a, b) {
+  return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+}
+
+function normalize(v) {
+  var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // avoid 0 division
+  if (length > 0.00001) {
+    return [v[0] / length, v[1] / length, v[2] / length];
+  } else {
+    return [0, 0, 0];
+  }
+}
+
+// get normal, tangent, bitangent vector
+function getVectors(vertices) {
+  const n = vertices.length;
   var vertexNormals = [];
   var vertexTangents = [];
   var vertexBitangents = [];
   for (let i = 0; i < n; i += 18) {
     const p1 = [
-      vertexPositions[i],
-      vertexPositions[i + 1],
-      vertexPositions[i + 2],
+      vertices[i],
+      vertices[i + 1],
+      vertices[i + 2],
     ];
     const p2 = [
-      vertexPositions[i + 3],
-      vertexPositions[i + 4],
-      vertexPositions[i + 5],
+      vertices[i + 3],
+      vertices[i + 4],
+      vertices[i + 5],
     ];
     const p3 = [
-      vertexPositions[i + 6],
-      vertexPositions[i + 7],
-      vertexPositions[i + 8],
+      vertices[i + 6],
+      vertices[i + 7],
+      vertices[i + 8],
     ];
 
     const vec1 = subtractVectors(p2, p1);
@@ -92,4 +84,4 @@ function getNormalVector(vPosition) {
   return vNormals;
 }
 
-export { subtractVectors, normalize, cross, getAllVectors, getNormalVector };
+export { subtractVectors, normalize, cross, getVectors, getNormalVector };

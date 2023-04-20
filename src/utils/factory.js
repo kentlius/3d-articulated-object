@@ -1,25 +1,18 @@
-import WebGLArticulatedObject from "./WebGLArticulatedObject.js";
-import WebGLObject from "./WebGLObject.js";
-
-export function webGLObjectFactory(model, gl, program) {
-  // Create the WebGL Object
-  const object = new WebGLObject(gl, program, model);
-
-  return object;
-}
+import ArticulatedObject from "./ArticulatedObject.js";
+import Object from "./Object.js";
 
 export function WebGLArticulatedObjectFactory(articulatedModel, gl, program) {
-  let articulatedObject = new WebGLArticulatedObject(
+  let articulatedObject = new ArticulatedObject(
     gl,
     program,
     articulatedModel
   );
 
   //Set object
-  articulatedObject.object = webGLObjectFactory(
-    articulatedModel,
+  articulatedObject.object = new Object(
     gl,
-    program
+    program,
+    articulatedModel
   );
   articulatedObject.object.scale = articulatedModel.scale;
   articulatedObject.object.setTexture(articulatedModel.texture);

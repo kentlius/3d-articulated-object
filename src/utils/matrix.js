@@ -1,4 +1,4 @@
-import { subtractVectors, normalize, cross } from "./vector.js";
+import { subtractVectors, normalize, cross } from "./utility.js";
 
 export class Matrix4 {
   nRow = 4;
