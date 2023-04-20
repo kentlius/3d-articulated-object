@@ -120,7 +120,7 @@ export class TEXTURE_MAP {
    * @returns - The texture.
    */
   static image(gl) {
-    const url = "./textures/sun.jpg";
+    const url = "./textures/amogus.gif";
 
     return TEXTURE_MAP.loadTexture2D(gl, url);
   }
