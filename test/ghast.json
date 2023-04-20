@@ -95,43 +95,127 @@
   "animations": [
     {
       "name": "walk",
-      "duration": 1000,
+      "duration": 10,
       "keyframes": [
         {
           "time": 0,
           "transforms": [
             {
-              "component": "left_leg",
+              "component": "leg_right_front",
               "rotation": [0, 0, 0]
             },
             {
-              "component": "right_leg",
+              "component": "leg_right_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_right_back",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_front",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_back",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_front",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_back",
               "rotation": [0, 0, 0]
             }
           ]
         },
         {
-          "time": 500,
+          "time": 5,
           "transforms": [
             {
-              "component": "left_leg",
-              "rotation": [0, 0, 45]
+              "component": "leg_right_front",
+              "rotation": [0,5, 0, 0]
             },
             {
-              "component": "right_leg",
-              "rotation": [0, 0, 135]
+              "component": "leg_right_center",
+              "rotation": [-0.5, 0, 0]
+            },
+            {
+              "component": "leg_right_back",
+              "rotation": [0.5, 0, 0]
+            },
+            {
+              "component": "leg_center_front",
+              "rotation": [-0.5, 0, 0]
+            },
+            {
+              "component": "leg_center_center",
+              "rotation": [0.5, 0, 0]
+            },
+            {
+              "component": "leg_center_back",
+              "rotation": [-0.5, 0, 0]
+            },
+            {
+              "component": "leg_left_front",
+              "rotation": [0.5, 0, 0]
+            },
+            {
+              "component": "leg_left_center",
+              "rotation": [-0.5, 0, 0]
+            },
+            {
+              "component": "leg_left_back",
+              "rotation": [0.5, 0, 0]
             }
           ]
         },
         {
-          "time": 1000,
+          "time": 10,
           "transforms": [
             {
-              "component": "left_leg",
+              "component": "leg_right_front",
               "rotation": [0, 0, 0]
             },
             {
-              "component": "right_leg",
+              "component": "leg_right_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_right_back",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_front",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_center_back",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_front",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_center",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg_left_back",
               "rotation": [0, 0, 0]
             }
           ]
