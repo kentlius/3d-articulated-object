@@ -1,7 +1,7 @@
-import { Matrix4 } from "./matrix.js";
+import { M4 } from "./matrix.js";
 import { interpolateRotation, resizeCanvasToDisplaySize } from "./utility.js";
 
-export class ArticulatedObjectRenderer {
+export class Renderer {
   constructor(gl, program) {
     this._gl = gl;
     this._program = program;
@@ -22,7 +22,6 @@ export class ArticulatedObjectRenderer {
   }
 
   setProjection(projection) {
-    // For orthographic projection.
     const left = 0;
     const right = this._gl.canvas.clientWidth;
     const bottom = 0;
@@ -30,19 +29,17 @@ export class ArticulatedObjectRenderer {
     const near = 850;
     const far = -850;
 
-    // For perspective projection.
     const fov = (60 * Math.PI) / 180;
     const aspect = this._gl.canvas.clientWidth / this._gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 2000;
     
-    // For oblique projection.
     const theta = 45;
     const phi = 45;
 
     switch (projection) {
       case "ORTHOGRAPHIC":
-        this.projectionMatrix = Matrix4.orthographic(
+        this.projectionMatrix = M4.orthographic(
           left,
           right,
           bottom,
@@ -52,7 +49,7 @@ export class ArticulatedObjectRenderer {
         );
         break;
       case "PERSPECTIVE":
-        this.projectionMatrix = Matrix4.perspective(
+        this.projectionMatrix = M4.perspective(
           fov, 
           aspect, 
           zNear, 
@@ -60,7 +57,7 @@ export class ArticulatedObjectRenderer {
         );
         break;
       default:
-        const ortho = Matrix4.orthographic(
+        const ortho = M4.orthographic(
           left, 
           right, 
           bottom, 
@@ -68,7 +65,7 @@ export class ArticulatedObjectRenderer {
           near, 
           far
         );
-        const oblique = Matrix4.oblique(
+        const oblique = M4.oblique(
           -theta, 
           -phi
         );
@@ -81,7 +78,6 @@ export class ArticulatedObjectRenderer {
   }
 
   drawScene() {
-    // setup canvas
     resizeCanvasToDisplaySize(this._gl.canvas);
     this._gl.viewport(0, 0, this._gl.canvas.width, this._gl.canvas.height);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
@@ -92,9 +88,8 @@ export class ArticulatedObjectRenderer {
       return;
     }
 
-    // setup camera according to the current projection
     const projectionMatrix = this.projectionMatrix.clone();
-    let cameraMatrix = Matrix4.identity();
+    let cameraMatrix = M4.identity();
     cameraMatrix.rotateY(this.cameraAngle);
     cameraMatrix.translate(0, 0, this.cameraRadius);
     var cameraPosition = [
@@ -104,12 +99,10 @@ export class ArticulatedObjectRenderer {
     ];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-    cameraMatrix = Matrix4.lookAt(cameraPosition, target, up);
+    cameraMatrix = M4.lookAt(cameraPosition, target, up);
 
-    //  create view matrix
     const viewMatrix = cameraMatrix.clone().inverse();
 
-    // Animate the object.
     if (this.animation !== undefined && this.animate) {
       this.currentTime += 1 / 60;
 
@@ -155,16 +148,14 @@ export class ArticulatedObjectRenderer {
       }
     }
 
-    // Draw the object.
     this.object.draw(
       projectionMatrix,
       viewMatrix,
-      Matrix4.identity(),
+      M4.identity(),
       cameraPosition,
       this.shadingMode
     );
 
-    // Call drawScene again next frame
     requestAnimationFrame(this.drawScene.bind(this));
   }
 }

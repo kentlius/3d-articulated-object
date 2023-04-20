@@ -1,8 +1,6 @@
 import { subtractVectors, normalize, cross } from "./utility.js";
 
-export class Matrix4 {
-  elements;
-
+export class M4 {
   constructor(matrix) {
     this.elements = new Array(16);
     if (matrix != null && matrix.length == 16) {
@@ -27,7 +25,7 @@ export class Matrix4 {
   }
 
   clone = () => {
-    let result = new Matrix4();
+    let result = new M4();
 
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 4; col++) {
@@ -45,12 +43,12 @@ export class Matrix4 {
       0, 0, 1, 0,
       0, 0, 0, 1
     ]
-    let matrix = new Matrix4(identity_matrix);
+    let matrix = new M4(identity_matrix);
     return matrix;
   }
 
   transpose = () => {
-    var transpose_matrix = [
+    const transpose_matrix = [
         this.elements[0], this.elements[4], this.elements[8], this.elements[12],
         this.elements[1], this.elements[5], this.elements[9], this.elements[13],
         this.elements[2], this.elements[6], this.elements[10], this.elements[14],
@@ -61,43 +59,41 @@ export class Matrix4 {
   }
 
   multiply = (matrix) => {
-    let result = new Matrix4();
-
-    var a = this.getMatrix();
-    var b = matrix.getMatrix();
-    var a00 = a[0 * 4 + 0];
-    var a01 = a[0 * 4 + 1];
-    var a02 = a[0 * 4 + 2];
-    var a03 = a[0 * 4 + 3];
-    var a10 = a[1 * 4 + 0];
-    var a11 = a[1 * 4 + 1];
-    var a12 = a[1 * 4 + 2];
-    var a13 = a[1 * 4 + 3];
-    var a20 = a[2 * 4 + 0];
-    var a21 = a[2 * 4 + 1];
-    var a22 = a[2 * 4 + 2];
-    var a23 = a[2 * 4 + 3];
-    var a30 = a[3 * 4 + 0];
-    var a31 = a[3 * 4 + 1];
-    var a32 = a[3 * 4 + 2];
-    var a33 = a[3 * 4 + 3];
-    var b00 = b[0 * 4 + 0];
-    var b01 = b[0 * 4 + 1];
-    var b02 = b[0 * 4 + 2];
-    var b03 = b[0 * 4 + 3];
-    var b10 = b[1 * 4 + 0];
-    var b11 = b[1 * 4 + 1];
-    var b12 = b[1 * 4 + 2];
-    var b13 = b[1 * 4 + 3];
-    var b20 = b[2 * 4 + 0];
-    var b21 = b[2 * 4 + 1];
-    var b22 = b[2 * 4 + 2];
-    var b23 = b[2 * 4 + 3];
-    var b30 = b[3 * 4 + 0];
-    var b31 = b[3 * 4 + 1];
-    var b32 = b[3 * 4 + 2];
-    var b33 = b[3 * 4 + 3];
-    var result_matrix = [
+    const a = this.getMatrix();
+    const b = matrix.getMatrix();
+    const a00 = a[0 * 4 + 0];
+    const a01 = a[0 * 4 + 1];
+    const a02 = a[0 * 4 + 2];
+    const a03 = a[0 * 4 + 3];
+    const a10 = a[1 * 4 + 0];
+    const a11 = a[1 * 4 + 1];
+    const a12 = a[1 * 4 + 2];
+    const a13 = a[1 * 4 + 3];
+    const a20 = a[2 * 4 + 0];
+    const a21 = a[2 * 4 + 1];
+    const a22 = a[2 * 4 + 2];
+    const a23 = a[2 * 4 + 3];
+    const a30 = a[3 * 4 + 0];
+    const a31 = a[3 * 4 + 1];
+    const a32 = a[3 * 4 + 2];
+    const a33 = a[3 * 4 + 3];
+    const b00 = b[0 * 4 + 0];
+    const b01 = b[0 * 4 + 1];
+    const b02 = b[0 * 4 + 2];
+    const b03 = b[0 * 4 + 3];
+    const b10 = b[1 * 4 + 0];
+    const b11 = b[1 * 4 + 1];
+    const b12 = b[1 * 4 + 2];
+    const b13 = b[1 * 4 + 3];
+    const b20 = b[2 * 4 + 0];
+    const b21 = b[2 * 4 + 1];
+    const b22 = b[2 * 4 + 2];
+    const b23 = b[2 * 4 + 3];
+    const b30 = b[3 * 4 + 0];
+    const b31 = b[3 * 4 + 1];
+    const b32 = b[3 * 4 + 2];
+    const b33 = b[3 * 4 + 3];
+    const result_matrix = [
         b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30,
         b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31,
         b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32,
@@ -120,43 +116,43 @@ export class Matrix4 {
   }
 
   static multiply = (matrix_a, matrix_b) => {
-    let result = new Matrix4();
+    let result = new M4();
 
-    var a = matrix_a.getMatrix();
-    var b = matrix_b.getMatrix();
-    var a00 = a[0 * 4 + 0];
-    var a01 = a[0 * 4 + 1];
-    var a02 = a[0 * 4 + 2];
-    var a03 = a[0 * 4 + 3];
-    var a10 = a[1 * 4 + 0];
-    var a11 = a[1 * 4 + 1];
-    var a12 = a[1 * 4 + 2];
-    var a13 = a[1 * 4 + 3];
-    var a20 = a[2 * 4 + 0];
-    var a21 = a[2 * 4 + 1];
-    var a22 = a[2 * 4 + 2];
-    var a23 = a[2 * 4 + 3];
-    var a30 = a[3 * 4 + 0];
-    var a31 = a[3 * 4 + 1];
-    var a32 = a[3 * 4 + 2];
-    var a33 = a[3 * 4 + 3];
-    var b00 = b[0 * 4 + 0];
-    var b01 = b[0 * 4 + 1];
-    var b02 = b[0 * 4 + 2];
-    var b03 = b[0 * 4 + 3];
-    var b10 = b[1 * 4 + 0];
-    var b11 = b[1 * 4 + 1];
-    var b12 = b[1 * 4 + 2];
-    var b13 = b[1 * 4 + 3];
-    var b20 = b[2 * 4 + 0];
-    var b21 = b[2 * 4 + 1];
-    var b22 = b[2 * 4 + 2];
-    var b23 = b[2 * 4 + 3];
-    var b30 = b[3 * 4 + 0];
-    var b31 = b[3 * 4 + 1];
-    var b32 = b[3 * 4 + 2];
-    var b33 = b[3 * 4 + 3];
-    var result_matrix = [
+    const a = matrix_a.getMatrix();
+    const b = matrix_b.getMatrix();
+    const a00 = a[0 * 4 + 0];
+    const a01 = a[0 * 4 + 1];
+    const a02 = a[0 * 4 + 2];
+    const a03 = a[0 * 4 + 3];
+    const a10 = a[1 * 4 + 0];
+    const a11 = a[1 * 4 + 1];
+    const a12 = a[1 * 4 + 2];
+    const a13 = a[1 * 4 + 3];
+    const a20 = a[2 * 4 + 0];
+    const a21 = a[2 * 4 + 1];
+    const a22 = a[2 * 4 + 2];
+    const a23 = a[2 * 4 + 3];
+    const a30 = a[3 * 4 + 0];
+    const a31 = a[3 * 4 + 1];
+    const a32 = a[3 * 4 + 2];
+    const a33 = a[3 * 4 + 3];
+    const b00 = b[0 * 4 + 0];
+    const b01 = b[0 * 4 + 1];
+    const b02 = b[0 * 4 + 2];
+    const b03 = b[0 * 4 + 3];
+    const b10 = b[1 * 4 + 0];
+    const b11 = b[1 * 4 + 1];
+    const b12 = b[1 * 4 + 2];
+    const b13 = b[1 * 4 + 3];
+    const b20 = b[2 * 4 + 0];
+    const b21 = b[2 * 4 + 1];
+    const b22 = b[2 * 4 + 2];
+    const b23 = b[2 * 4 + 3];
+    const b30 = b[3 * 4 + 0];
+    const b31 = b[3 * 4 + 1];
+    const b32 = b[3 * 4 + 2];
+    const b33 = b[3 * 4 + 3];
+    const result_matrix = [
         b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30,
         b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31,
         b00 * a02 + b01 * a12 + b02 * a22 + b03 * a32,
@@ -180,39 +176,39 @@ export class Matrix4 {
   }
 
   inverse = () => {
-    var a00 = this.elements[0 * 4 + 0];
-    var a01 = this.elements[0 * 4 + 1];
-    var a02 = this.elements[0 * 4 + 2];
-    var a03 = this.elements[0 * 4 + 3];
-    var a10 = this.elements[1 * 4 + 0];
-    var a11 = this.elements[1 * 4 + 1];
-    var a12 = this.elements[1 * 4 + 2];
-    var a13 = this.elements[1 * 4 + 3];
-    var a20 = this.elements[2 * 4 + 0];
-    var a21 = this.elements[2 * 4 + 1];
-    var a22 = this.elements[2 * 4 + 2];
-    var a23 = this.elements[2 * 4 + 3];
-    var a30 = this.elements[3 * 4 + 0];
-    var a31 = this.elements[3 * 4 + 1];
-    var a32 = this.elements[3 * 4 + 2];
-    var a33 = this.elements[3 * 4 + 3];
+    const a00 = this.elements[0 * 4 + 0];
+    const a01 = this.elements[0 * 4 + 1];
+    const a02 = this.elements[0 * 4 + 2];
+    const a03 = this.elements[0 * 4 + 3];
+    const a10 = this.elements[1 * 4 + 0];
+    const a11 = this.elements[1 * 4 + 1];
+    const a12 = this.elements[1 * 4 + 2];
+    const a13 = this.elements[1 * 4 + 3];
+    const a20 = this.elements[2 * 4 + 0];
+    const a21 = this.elements[2 * 4 + 1];
+    const a22 = this.elements[2 * 4 + 2];
+    const a23 = this.elements[2 * 4 + 3];
+    const a30 = this.elements[3 * 4 + 0];
+    const a31 = this.elements[3 * 4 + 1];
+    const a32 = this.elements[3 * 4 + 2];
+    const a33 = this.elements[3 * 4 + 3];
 
-    var b00 = a00 * a11 - a01 * a10;
-    var b01 = a00 * a12 - a02 * a10;
-    var b02 = a00 * a13 - a03 * a10;
-    var b03 = a01 * a12 - a02 * a11;
-    var b04 = a01 * a13 - a03 * a11;
-    var b05 = a02 * a13 - a03 * a12;
-    var b06 = a20 * a31 - a21 * a30;
-    var b07 = a20 * a32 - a22 * a30;
-    var b08 = a20 * a33 - a23 * a30;
-    var b09 = a21 * a32 - a22 * a31;
-    var b10 = a21 * a33 - a23 * a31;
-    var b11 = a22 * a33 - a23 * a32;
+    const b00 = a00 * a11 - a01 * a10;
+    const b01 = a00 * a12 - a02 * a10;
+    const b02 = a00 * a13 - a03 * a10;
+    const b03 = a01 * a12 - a02 * a11;
+    const b04 = a01 * a13 - a03 * a11;
+    const b05 = a02 * a13 - a03 * a12;
+    const b06 = a20 * a31 - a21 * a30;
+    const b07 = a20 * a32 - a22 * a30;
+    const b08 = a20 * a33 - a23 * a30;
+    const b09 = a21 * a32 - a22 * a31;
+    const b10 = a21 * a33 - a23 * a31;
+    const b11 = a22 * a33 - a23 * a32;
 
-    var invDet = 1 / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
+    const invDet = 1 / (b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06);
 
-    var inv_matrix = [
+    const inv_matrix = [
       (a11 * b11 - a12 * b10 + a13 * b09) * invDet,
       (a02 * b10 - a01 * b11 - a03 * b09) * invDet,
       (a31 * b05 - a32 * b04 + a33 * b03) * invDet,
@@ -245,12 +241,12 @@ export class Matrix4 {
 
 
   static lookAt(cameraPosition, target, up) {
-    var zAxis = normalize(
+    const zAxis = normalize(
         subtractVectors(cameraPosition, target));
-    var xAxis = normalize(cross(up, zAxis));
-    var yAxis = normalize(cross(zAxis, xAxis));
+    const xAxis = normalize(cross(up, zAxis));
+    const yAxis = normalize(cross(zAxis, xAxis));
 
-    return new Matrix4([
+    return new M4([
         xAxis[0], xAxis[1], xAxis[2], 0,
         yAxis[0], yAxis[1], yAxis[2], 0,
         zAxis[0], zAxis[1], zAxis[2], 0,
@@ -266,7 +262,7 @@ export class Matrix4 {
     let height = top - bottom;
     let depth = far - near;
 
-    return new Matrix4([
+    return new M4([
       2 / width, 0, 0, 0,
       0, 2 / height, 0, 0,
       0, 0, 2 / depth, 0,
@@ -278,7 +274,7 @@ export class Matrix4 {
     let f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
     let rangeInv = 1.0 / (near - far);
 
-    return new Matrix4([
+    return new M4([
       f / aspect, 0, 0, 0,
       0, f, 0, 0,
       0, 0, (near + far) * rangeInv, -1,
@@ -293,7 +289,7 @@ export class Matrix4 {
     let cotT = -1 / Math.tan(t);
     let cotP = -1 / Math.tan(p);
 
-    const matrix = new Matrix4([
+    const matrix = new M4([
       1, 0, cotT, 0,
       0, 1, cotP, 0,
       0, 0, 1, 0,
@@ -307,7 +303,7 @@ export class Matrix4 {
 
   static projection(width, height, depth) {
     // Note: This matrix flips the Y axis so 0 is at the top.
-    return new Matrix4([
+    return new M4([
         2 / width, 0, 0, 0,
         0, -2 / height, 0, 0,
         0, 0, 2 / depth, 0,
@@ -316,7 +312,7 @@ export class Matrix4 {
   }
 
   rotateX = (angle) => {
-    let matrix = new Matrix4();
+    let matrix = new M4();
     let s = Math.sin(angle);
     let c = Math.cos(angle);
 
@@ -331,7 +327,7 @@ export class Matrix4 {
   }
  
   rotateY = (angle) => {
-    let matrix = new Matrix4();
+    let matrix = new M4();
     let s = Math.sin(angle);
     let c = Math.cos(angle);
 
@@ -346,7 +342,7 @@ export class Matrix4 {
   }
 
   rotateZ = (angle) => {
-    let matrix = new Matrix4();
+    let matrix = new M4();
     let s = Math.sin(angle);
     let c = Math.cos(angle);
 
@@ -361,7 +357,7 @@ export class Matrix4 {
   }
 
   translate = (tx, ty, tz) => {
-    let matrix = new Matrix4();
+    let matrix = new M4();
     matrix.setMatrix([
       1, 0, 0, 0,
       0, 1, 0, 0,
@@ -374,7 +370,7 @@ export class Matrix4 {
   }
 
   rotate = (angleX, angleY, angleZ) => {
-    let matrix = Matrix4.identity();
+    let matrix = M4.identity();
     matrix.rotateX(angleX);
     matrix.rotateY(angleY);
     matrix.rotateZ(angleZ);
@@ -384,7 +380,7 @@ export class Matrix4 {
   }
 
   scale = (sx, sy, sz) => {
-    let matrix = new Matrix4();
+    let matrix = new M4();
     matrix.setMatrix([
       sx, 0, 0, 0,
       0, sy, 0, 0,

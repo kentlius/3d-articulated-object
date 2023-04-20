@@ -11,8 +11,8 @@ function subtractVectors(a, b) {
 }
 
 function normalize(v) {
-  var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-  // avoid 0 division
+  const length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+
   if (length > 0.00001) {
     return [v[0] / length, v[1] / length, v[2] / length];
   } else {
@@ -20,28 +20,15 @@ function normalize(v) {
   }
 }
 
-// get normal, tangent, bitangent vector
 function getVectors(vertices) {
   const n = vertices.length;
-  var vertexNormals = [];
-  var vertexTangents = [];
-  var vertexBitangents = [];
+  let vertexNormals = [];
+  let vertexTangents = [];
+  let vertexBitangents = [];
   for (let i = 0; i < n; i += 18) {
-    const p1 = [
-      vertices[i],
-      vertices[i + 1],
-      vertices[i + 2],
-    ];
-    const p2 = [
-      vertices[i + 3],
-      vertices[i + 4],
-      vertices[i + 5],
-    ];
-    const p3 = [
-      vertices[i + 6],
-      vertices[i + 7],
-      vertices[i + 8],
-    ];
+    const p1 = [vertices[i], vertices[i + 1], vertices[i + 2]];
+    const p2 = [vertices[i + 3], vertices[i + 4], vertices[i + 5]];
+    const p3 = [vertices[i + 6], vertices[i + 7], vertices[i + 8]];
 
     const vec1 = subtractVectors(p2, p1);
     const vec2 = subtractVectors(p3, p1);
@@ -84,6 +71,7 @@ function interpolateRotation(
     ];
   }
 }
+
 function createShader(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, source);
@@ -123,13 +111,13 @@ function resizeCanvasToDisplaySize(canvas, multiplier) {
   return false;
 }
 
-export { 
-  subtractVectors, 
-  normalize, 
-  cross, 
-  getVectors, 
+export {
+  subtractVectors,
+  normalize,
+  cross,
+  getVectors,
   interpolateRotation,
   createProgram,
   createShader,
-  resizeCanvasToDisplaySize
+  resizeCanvasToDisplaySize,
 };

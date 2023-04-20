@@ -29,12 +29,6 @@ export function fromTextureMode(mode) {
 }
 
 export class TEXTURE_MAP {
-  /**
-   * Use and create an environment map texture.
-   *
-   * @param gl - The WebGL context.
-   * @returns - The texture.
-   */
   static environment(gl) {
     // Create the texture.
     let texture = gl.createTexture();
@@ -95,7 +89,6 @@ export class TEXTURE_MAP {
       // Asynchronously load an image
       const image = new Image();
       image.src = url;
-      image.crossOrigin = ""; // ask for CORS permission
       image.addEventListener("load", function () {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
@@ -113,35 +106,17 @@ export class TEXTURE_MAP {
     return texture;
   }
 
-  /**
-   * Use and create an environment map texture.
-   *
-   * @param gl - The WebGL context.
-   * @returns - The texture.
-   */
   static image(gl) {
     const url = "./textures/amogus.gif";
 
     return TEXTURE_MAP.loadTexture2D(gl, url);
   }
 
-  /**
-   * Use and create an environment map texture.
-   *
-   * @param gl - The WebGL context.
-   * @returns - The texture.
-   */
   static bump(gl) {
     const url = "./textures/bump.png";
     return TEXTURE_MAP.loadTexture2D(gl, url);
   }
 
-  /**
-   * Use and create an environment map texture.
-   *
-   * @param gl - The WebGL context.
-   * @returns - The texture.
-   */
   static default(gl, color) {
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -160,12 +135,6 @@ export class TEXTURE_MAP {
   }
 
 
-  /**
-   * Load the texture 2D from the url and create a WebGLTexture.
-   * @param gl - The WebGL context.
-   * @param url - The url of the texture.
-   * @returns - The texture.
-   */
   static loadTexture2D(gl, url) {
     // Create a texture.
     var texture = gl.createTexture();
@@ -195,7 +164,6 @@ export class TEXTURE_MAP {
     // Asynchronously load an image
     var image = new Image();
     image.src = url;
-    image.crossOrigin = ""; // ask for CORS permission
     image.addEventListener("load", function () {
       // Now that the image has loaded make copy it to the texture.
       gl.bindTexture(gl.TEXTURE_2D, texture);

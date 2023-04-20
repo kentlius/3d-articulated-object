@@ -1,14 +1,14 @@
 import { fragmentShaderSource } from "./shaders/fragment-shader.js";
 import { vertexShaderSource } from "./shaders/vertex-shader.js";
-import { ArticulatedObjectRenderer } from "./utils/ArticulatedObjectRenderer.js";
+import { Renderer } from "./utils/renderer.js";
 import steve from "../test/steve.json" assert { type: "json" };
 import ghast from "../test/ghast.json" assert { type: "json" };
 import snow_golem from "../test/snow_golem.json" assert { type: "json" };
 import sheep from "../test/sheep.json" assert { type: "json" };
-import ArticulatedObject from "./utils/ArticulatedObject.js";
+import ArticulatedObject from "./utils/articulated-object.js";
 import { createShader, createProgram } from "./utils/utility.js";
 
-async function main() {
+function main() {
   const canvas = document.querySelector("#canvas");
   const gl = canvas.getContext("webgl");
   if (!gl) {
@@ -24,7 +24,7 @@ async function main() {
 
   let loadModel = steve;
   let articulatedObject;
-  const articulatedRenderer = new ArticulatedObjectRenderer(gl, program);
+  const articulatedRenderer = new Renderer(gl, program);
 
   let component = 0;
   const tree = document.querySelector("#tree");

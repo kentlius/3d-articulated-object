@@ -1,10 +1,8 @@
-import Object from "./Object.js";
+import Object from "./object.js";
 
 export default class ArticulatedObject {
-  // Articulated Object Properties
   children = [];
 
-  // Transformation Properties
   translation = [0, 0, 0];
   rotation = [0, 0, 0];
   scale = [1, 1, 1];
@@ -17,13 +15,11 @@ export default class ArticulatedObject {
     this.object.scale = articulatedModel.scale;
     this.object.setTexture(articulatedModel.texture);
 
-    //Set other properties
     this.name = articulatedModel.id;
     this.translation = articulatedModel.coordinates;
-    this.rotation = articulatedModel.rotation.map((x) => x*Math.PI/180);
+    this.rotation = articulatedModel.rotation.map((x) => (x * Math.PI) / 180);
     this.scale = [1, 1, 1];
 
-    //Set children
     for (let i = 0; i < articulatedModel.children.length; i++) {
       this.children.push(
         new ArticulatedObject(gl, program, articulatedModel.children[i])
@@ -35,10 +31,8 @@ export default class ArticulatedObject {
     let newModel = model.clone();
     newModel.transform(this.translation, this.rotation, this.scale);
 
-    // draw object recursively
-    //draw the object
     this.object.draw(projection, view, newModel, cameraPosition, shadingMode);
-    // draw object's children
+
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].draw(
         projection,
@@ -99,22 +93,6 @@ export default class ArticulatedObject {
       toReturn += this.children[i].getTotalObj();
     }
     return toReturn;
-  }
-
-  applyFrame(frame, idx = 0) {
-    //Apply transformation to object
-    this.translation = frame.transformations[idx].tr_subtr.map((e) => e);
-    this.rotation = frame.transformations[idx].rot_subtr.map(
-      (x) => (x * Math.PI) / 180
-    );
-    this.scale = frame.transformations[idx].scale_subtr.map((e) => e);
-    idx++;
-
-    //Apply transformation to children
-    for (let i = 0; i < this.children.length; i++) {
-      this.children[i].applyFrame(frame, idx);
-      idx += this.children[i].getTotalObj();
-    }
   }
 
   setTexture(toTexture) {
