@@ -1,6 +1,5 @@
 import WebGLArticulatedObject from "./WebGLArticulatedObject.js";
 import WebGLObject from "./WebGLObject.js";
-import { Transformation, Frame, Animation } from "./Animation.js";
 
 export function webGLObjectFactory(model, gl, program) {
   // Create the WebGL Object
@@ -62,30 +61,4 @@ export function WebGLArticulatedModelFactory(articulatedObject) {
   }
 
   return articulatedModel;
-}
-
-function TransformationFactory(transformationModel) {
-  let transformation = new Transformation();
-  transformation.tr_subtr = transformationModel.tr_subtr;
-  transformation.rot_subtr = transformationModel.rot_subtr;
-  transformation.scale_subtr = transformationModel.scale_subtr;
-  return transformation;
-}
-
-function FrameFactory(frameModel) {
-  let frame = new Frame();
-  for (let i = 0; i < frameModel.transformations.length; i++) {
-    frame.transformations.push(
-      TransformationFactory(frameModel.transformations[i])
-    );
-  }
-  return frame;
-}
-
-export function AnimationFactory(animationModel) {
-  let animation = new Animation();
-  for (let i = 0; i < animationModel.frames.length; i++) {
-    animation.frames.push(FrameFactory(animationModel.frames[i]));
-  }
-  return animation;
 }

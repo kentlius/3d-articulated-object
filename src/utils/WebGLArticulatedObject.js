@@ -1,5 +1,4 @@
 import WebGLObject from "./WebGLObject.js";
-import { Transformation } from "./Animation.js";
 
 export default class WebGLArticulatedObject {
   // Struktur tree rekursif
@@ -102,19 +101,6 @@ export default class WebGLArticulatedObject {
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].applyFrame(frame, idx);
       idx += this.children[i].getNumObj();
-    }
-  }
-
-  getFrame(toReturn) {
-    //Copying reference agar penggantian di UI juga mengganti frame
-    let toAdd = new Transformation();
-    toAdd.tr_subtr = this.translation;
-    toAdd.rot_subtr = this.rotation.map((x) => (x * 180) / Math.PI);
-    toAdd.scale_subtr = this.scale;
-    toReturn.transformations.push(toAdd);
-
-    for (let i = 0; i < this.children.length; i++) {
-      this.children[i].getFrame(toReturn);
     }
   }
 
