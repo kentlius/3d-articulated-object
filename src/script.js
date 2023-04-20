@@ -24,7 +24,7 @@ function main() {
 
   let loadModel = steve;
   let articulatedObject;
-  const articulatedRenderer = new Renderer(gl, program);
+  const renderer = new Renderer(gl, program);
 
   let component = 0;
   const tree = document.querySelector("#tree");
@@ -53,27 +53,27 @@ function main() {
       program,
       loadModel.components[0]
     );
-    articulatedRenderer.setObject(articulatedObject);
-    articulatedRenderer.setAnimation(loadModel.animations[0]);
+    renderer.setObject(articulatedObject);
+    renderer.setAnimation(loadModel.animations[0]);
     requestAnimationFrame(
-      articulatedRenderer.drawScene.bind(articulatedRenderer)
+      renderer.drawScene.bind(renderer)
     );
-    tree.innerHTML = articulatedRenderer.object.generateHTML(0, 0);
+    tree.innerHTML = renderer.object.generateHTML(0, 0);
     component = 0;
-    selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
-    translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
-    translateY.value = articulatedRenderer.object.getArticulatedObject(component).translation[1];
-    translateZ.value = articulatedRenderer.object.getArticulatedObject(component).translation[2];
-    rotateX.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
-    rotateY.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
-    rotateZ.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
-    scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
-    scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
-    scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
-    angle.value = (articulatedRenderer.cameraAngle * Math.PI) / 180;
-    radius.value = articulatedRenderer.cameraRadius;
-    shading.checked = articulatedRenderer.shadingMode;
-    articulatedRenderer.setProjection("ORTHOGRAPHIC");
+    selected.innerHTML = "Selected Component: " + renderer.object.getArticulatedObject(component).name;
+    translateX.value = renderer.object.getArticulatedObject(component).translation[0];
+    translateY.value = renderer.object.getArticulatedObject(component).translation[1];
+    translateZ.value = renderer.object.getArticulatedObject(component).translation[2];
+    rotateX.value = (renderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
+    rotateY.value = (renderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
+    rotateZ.value = (renderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
+    scaleX.value = renderer.object.getArticulatedObject(component).scale[0];
+    scaleY.value = renderer.object.getArticulatedObject(component).scale[1];
+    scaleZ.value = renderer.object.getArticulatedObject(component).scale[2];
+    angle.value = (renderer.cameraAngle * Math.PI) / 180;
+    radius.value = renderer.cameraRadius;
+    shading.checked = renderer.shadingMode;
+    renderer.setProjection("ORTHOGRAPHIC");
     projections.forEach((projection) => {
       if (projection.value === "orthographic") {
         projection.checked = true;
@@ -89,20 +89,20 @@ function main() {
       }
     });
     
-    for (let i = 0; i < articulatedRenderer.object.getTotalObj(); i++) {
+    for (let i = 0; i < renderer.object.getTotalObj(); i++) {
       let button = document.querySelector("#Object-" + i);
       button.onclick = () => {
         component = i;
-        selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
-        translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
-        translateY.value = articulatedRenderer.object.getArticulatedObject(component).translation[1];
-        translateZ.value = articulatedRenderer.object.getArticulatedObject(component).translation[2];
-        rotateX.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
-        rotateY.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
-        rotateZ.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
-        scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
-        scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
-        scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
+        selected.innerHTML = "Selected Component: " + renderer.object.getArticulatedObject(component).name;
+        translateX.value = renderer.object.getArticulatedObject(component).translation[0];
+        translateY.value = renderer.object.getArticulatedObject(component).translation[1];
+        translateZ.value = renderer.object.getArticulatedObject(component).translation[2];
+        rotateX.value = (renderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
+        rotateY.value = (renderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
+        rotateZ.value = (renderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
+        scaleX.value = renderer.object.getArticulatedObject(component).scale[0];
+        scaleY.value = renderer.object.getArticulatedObject(component).scale[1];
+        scaleZ.value = renderer.object.getArticulatedObject(component).scale[2];
       }
     }
   };
@@ -134,7 +134,7 @@ function main() {
   // Projection Radio Button Handler
   projections.forEach((projection) => {
     projection.addEventListener("change", (event) => {
-      articulatedRenderer.setProjection(event.target.value.toUpperCase());
+      renderer.setProjection(event.target.value.toUpperCase());
     });
   });
 
@@ -142,59 +142,59 @@ function main() {
   textures.forEach((texture) => {
     texture.addEventListener("change", (event) => {
       // set texture for all components
-      for (let i = 0; i < articulatedRenderer.object.getTotalObj(); i++) {
-        articulatedRenderer.object.getArticulatedObject(i).object.setTexture(event.target.value.toUpperCase());
+      for (let i = 0; i < renderer.object.getTotalObj(); i++) {
+        renderer.object.getArticulatedObject(i).object.setTexture(event.target.value.toUpperCase());
       }
     });
   });
 
   // Translation Slider Handlers
   translateX.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).translation[0] = translateX.value;
+    renderer.object.getArticulatedObject(component).translation[0] = translateX.value;
   });
 
   translateY.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).translation[1] = translateY.value;
+    renderer.object.getArticulatedObject(component).translation[1] = translateY.value;
   });
 
   translateZ.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).translation[2] = translateZ.value;
+    renderer.object.getArticulatedObject(component).translation[2] = translateZ.value;
   });
 
   // Rotation Slider Handlers
   rotateX.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).rotation[0] = (rotateX.value * Math.PI) / 180;
+    renderer.object.getArticulatedObject(component).rotation[0] = (rotateX.value * Math.PI) / 180;
   });
 
   rotateY.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).rotation[1] = (rotateY.value * Math.PI) / 180;
+    renderer.object.getArticulatedObject(component).rotation[1] = (rotateY.value * Math.PI) / 180;
   });
 
   rotateZ.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).rotation[2] = (rotateZ.value * Math.PI) / 180;
+    renderer.object.getArticulatedObject(component).rotation[2] = (rotateZ.value * Math.PI) / 180;
   });
 
   // Scale Slider Handlers
   scaleX.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).scale[0] = scaleX.value;
+    renderer.object.getArticulatedObject(component).scale[0] = scaleX.value;
   });
 
   scaleY.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).scale[1] = scaleY.value;
+    renderer.object.getArticulatedObject(component).scale[1] = scaleY.value;
   });
 
   scaleZ.addEventListener("input", () => {
-    articulatedRenderer.object.getArticulatedObject(component).scale[2] = scaleZ.value;
+    renderer.object.getArticulatedObject(component).scale[2] = scaleZ.value;
   });
 
   // View Angle Slider Handler
   angle.addEventListener("input", () => {
-    articulatedRenderer.cameraAngle = (angle.value * Math.PI) / 180;
+    renderer.cameraAngle = (angle.value * Math.PI) / 180;
   });
 
   // View Radius Slider Handler
   radius.addEventListener("input", () => {
-    articulatedRenderer.cameraRadius = radius.value;
+    renderer.cameraRadius = radius.value;
   });
 
   // Toggle Shading
@@ -204,15 +204,15 @@ function main() {
     } else {
       isShading = true;
     }
-    articulatedRenderer.shadingMode = isShading;
+    renderer.shadingMode = isShading;
   });
 
   // Toggle Animation
   animate.addEventListener("change", (event) => {
     if (!event.target.checked) {
-      articulatedRenderer.animate = false;
+      renderer.animate = false;
     } else {
-      articulatedRenderer.animate = true;
+      renderer.animate = true;
     }
   });
 
