@@ -1,4 +1,3 @@
-import { degToRad, radToDeg } from "./helper.js";
 import WebGLArticulatedObject from "./WebGLArticulatedObject.js";
 import WebGLObject from "./WebGLObject.js";
 import { Transformation, Frame, Animation } from "./Animation.js";
@@ -29,7 +28,7 @@ export function WebGLArticulatedObjectFactory(articulatedModel, gl, program) {
   //Set other properties
   articulatedObject.name = articulatedModel.id;
   articulatedObject.translation = articulatedModel.coordinates;
-  articulatedObject.rotation = articulatedModel.rotation.map(degToRad);
+  articulatedObject.rotation = articulatedModel.rotation.map((x) => x*Math.PI/180);
   articulatedObject.scale = [1, 1, 1];
 
   //Set children
@@ -47,7 +46,7 @@ export function WebGLArticulatedModelFactory(articulatedObject) {
     name: articulatedObject.name,
 
     tl_subtr: articulatedObject.translation,
-    rot_subtr: articulatedObject.rotation.map(radToDeg),
+    rot_subtr: articulatedObject.rotation.map((x) => x*180/Math.PI),
     scale_subtr: articulatedObject.scale,
     texture: fromTextureMode(articulatedObject.object.textureMode),
 

@@ -1,4 +1,3 @@
-import { degToRad, radToDeg } from "./helper.js";
 import WebGLObject from "./WebGLObject.js";
 import { Transformation } from "./Animation.js";
 
@@ -80,7 +79,7 @@ export default class WebGLArticulatedObject {
   applyFrame(frame, idx = 0) {
     //Applying transformations, deep copy
     this.translation = frame.transformations[idx].tr_subtr.map((e) => e);
-    this.rotation = frame.transformations[idx].rot_subtr.map(degToRad);
+    this.rotation = frame.transformations[idx].rot_subtr.map((x) => x*Math.PI/180);
     this.scale = frame.transformations[idx].scale_subtr.map((e) => e);
     idx++;
 
@@ -95,7 +94,7 @@ export default class WebGLArticulatedObject {
     //Copying reference agar penggantian di UI juga mengganti frame
     let toAdd = new Transformation();
     toAdd.tr_subtr = this.translation;
-    toAdd.rot_subtr = this.rotation.map(radToDeg);
+    toAdd.rot_subtr = this.rotation.map((x) => x*180/Math.PI);
     toAdd.scale_subtr = this.scale;
     toReturn.transformations.push(toAdd);
 

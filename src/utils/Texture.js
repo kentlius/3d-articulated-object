@@ -1,5 +1,3 @@
-import { isPowerOf2 } from "./helper.js";
-
 export function toTextureMode(texture) {
   switch (texture) {
     case "CUSTOM":
@@ -47,27 +45,27 @@ export class TEXTURE_MAP {
     const faceInfos = [
       {
         target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-        url: "./textures/pos-x.jpg",
+        url: "./textures/x+.jpg",
       },
       {
         target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-        url: "./textures/neg-x.jpg",
+        url: "./textures/x-.jpg",
       },
       {
         target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-        url: "./textures/pos-y.jpg",
+        url: "./textures/y+.jpg",
       },
       {
         target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-        url: "./textures/neg-y.jpg",
+        url: "./textures/y-.jpg",
       },
       {
         target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-        url: "./textures/pos-z.jpg",
+        url: "./textures/z+.jpg",
       },
       {
         target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-        url: "./textures/neg-z.jpg",
+        url: "./textures/z-.jpg",
       },
     ];
     faceInfos.forEach((faceInfo) => {
@@ -156,7 +154,7 @@ export class TEXTURE_MAP {
       0,
       gl.RGBA,
       gl.UNSIGNED_BYTE,
-      new Uint8Array([0, 0, 255, 255])
+      new Uint8Array([255, 255, 255, 255])
     );
     return texture;
   }
@@ -211,7 +209,7 @@ export class TEXTURE_MAP {
       );
 
       // Check if the image is a power of 2 in both dimensions.
-      if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+      if (((image.width & (image.width - 1)) === 0) && ((image.height & (image.height - 1)) === 0)) {
         // Yes, it's a power of 2. Generate mips.
         gl.generateMipmap(gl.TEXTURE_2D);
       } else {

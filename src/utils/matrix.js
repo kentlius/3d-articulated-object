@@ -1,4 +1,3 @@
-import { degToRad } from "./helper.js";
 import { subtractVectors, normalize, cross } from "./vector.js";
 
 export class Matrix4 {
@@ -315,8 +314,8 @@ export class Matrix4 {
    * @returns - The oblique projection matrix.
    */
    static oblique = (theta, phi) => {
-    let t = degToRad(theta);
-    let p = degToRad(phi);
+    let t = theta * Math.PI / 180;
+    let p = phi * Math.PI / 180;
 
     let cotT = -1 / Math.tan(t);
     let cotP = -1 / Math.tan(p);

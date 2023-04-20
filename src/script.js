@@ -84,7 +84,7 @@ async function main() {
       }
     });
     textures.forEach((texture) => {
-      if (texture.value === "default") {
+      if (texture.value.toUpperCase() === loadModel.components[0].texture) {
         texture.checked = true;
       } else{
         texture.checked = false;

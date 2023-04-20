@@ -1,6 +1,5 @@
 import { resizeCanvasToDisplaySize } from "./webgl-utils.js";
 import { Matrix4 } from "./matrix.js";
-import { degToRad } from "./helper.js";
 
 export class WebGLArticulatedRenderer {
   constructor(gl, program) {
@@ -11,7 +10,7 @@ export class WebGLArticulatedRenderer {
 
   setObject(object) {
     this.object = object;
-    this.cameraAngle = degToRad(0);
+    this.cameraAngle = 0 * Math.PI / 180;
     this.cameraRadius = 500;
     this.shadingMode = false;
   }
@@ -26,7 +25,7 @@ export class WebGLArticulatedRenderer {
     const far = -850;
 
     // Perspective projection parameters.
-    const fov = degToRad(60);
+    const fov = 60 * Math.PI / 180;
     const aspect = this._gl.canvas.clientWidth / this._gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 2000;
