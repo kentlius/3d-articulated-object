@@ -28,11 +28,7 @@
             {
               "id": "right_hand",
               "color": "#00FF00",
-              "texture": {
-                "bump": null,
-                "reflective": true,
-                "custom": null
-              },
+              "texture": "textures/bump.png",
               "coordinates": [0, -130, 0],
               "rotation": [0, 0, 0],
               "scale": [0.2, 0.8, 0.2],
@@ -51,11 +47,7 @@
             {
               "id": "left_hand",
               "color": "#00FF00",
-              "texture": {
-                "bump": null,
-                "reflective": true,
-                "custom": null
-              },
+              "texture": "textures/bump.png",
               "coordinates": [0, -130, 0],
               "rotation": [0, 0, 0],
               "scale": [0.2, 0.8, 0.2],

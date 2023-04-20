@@ -2,48 +2,15 @@ import { resizeCanvasToDisplaySize } from "./webgl-utils.js";
 import { Matrix4 } from "./matrix.js";
 import { degToRad } from "./helper.js";
 
-/**
- * A Class for rendering WebGL objects.
- */
 export class WebGLArticulatedRenderer {
-  // The object to be drawn.
-  object;
-
-  cameraAngle = degToRad(0);
-  cameraRadius = 500;
-  shadingMode = false;
-
-  // WebGL Context.
-  _gl;
-  get gl() {
-    return this._gl;
-  }
-
-  // WebGL Shader Program.
-  _program;
-  get program() {
-    return this._program;
-  }
-
-  // Projection matrix.
-  projectionMatrix;
-  // Animation properties.
-  then = 0;
-
   constructor(gl, program) {
     this._gl = gl;
     this._program = program;
-
-    // Default projection.
     this.setProjection("ORTHOGRAPHIC");
   }
 
   setObject(object) {
     this.object = object;
-    this.setDefaultTransformation();
-  }
-
-  setDefaultTransformation() {
     this.cameraAngle = degToRad(0);
     this.cameraRadius = 500;
     this.shadingMode = false;
@@ -95,9 +62,6 @@ export class WebGLArticulatedRenderer {
     }
   }
 
-  /**
-   * Draw the scene.
-   */
   drawScene(now) {
     // Convert to seconds
     now *= 0.001;
@@ -162,14 +126,4 @@ export class WebGLArticulatedRenderer {
     // Call drawScene again next frame
     requestAnimationFrame(this.drawScene.bind(this));
   }
-
-  clear() {
-    this.object = null;
-  }
-
-  reset(object) {
-    this.object = object;
-  }
 }
-
-export default WebGLArticulatedRenderer;
