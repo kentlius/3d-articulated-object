@@ -13,27 +13,9 @@ export function toTextureMode(texture) {
   }
 }
 
-export function fromTextureMode(mode) {
-  switch (mode) {
-    case 0:
-      return "CUSTOM";
-    case 1:
-      return "REFLECTIVE";
-    case 2:
-      return "BUMP";
-    case 3:
-      return "DEFAULT";
-    default:
-      return "NONE";
-  }
-}
-
 export class TEXTURE_MAP {
   static environment(gl) {
-    // Create the texture.
     let texture = gl.createTexture();
-
-    // Bind the texture.
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
 
     const faceInfos = [
@@ -65,7 +47,6 @@ export class TEXTURE_MAP {
     faceInfos.forEach((faceInfo) => {
       const { target, url } = faceInfo;
 
-      // Upload the canvas to the cubemap face.
       const level = 0;
       const internalFormat = gl.RGBA;
       const width = 512;
@@ -73,7 +54,6 @@ export class TEXTURE_MAP {
       const format = gl.RGBA;
       const type = gl.UNSIGNED_BYTE;
 
-      // setup each face so it's immediately renderable
       gl.texImage2D(
         target,
         level,
@@ -108,17 +88,16 @@ export class TEXTURE_MAP {
 
   static image(gl) {
     const url = "./textures/amogus.gif";
-
-    return TEXTURE_MAP.loadTexture2D(gl, url);
+    return TEXTURE_MAP.loadTexture(gl, url);
   }
 
   static bump(gl) {
     const url = "./textures/bump.png";
-    return TEXTURE_MAP.loadTexture2D(gl, url);
+    return TEXTURE_MAP.loadTexture(gl, url);
   }
 
-  static default(gl, color) {
-    var texture = gl.createTexture();
+  static default(gl) {
+    const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(
       gl.TEXTURE_2D,
@@ -134,13 +113,10 @@ export class TEXTURE_MAP {
     return texture;
   }
 
-
-  static loadTexture2D(gl, url) {
-    // Create a texture.
-    var texture = gl.createTexture();
+  static loadTexture(gl, url) {
+    const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
-    // Fill the texture with a 1x1 blue pixel.
     const level = 0;
     const internalFormat = gl.RGBA;
     const width = 1;
@@ -162,7 +138,7 @@ export class TEXTURE_MAP {
     );
 
     // Asynchronously load an image
-    var image = new Image();
+    const image = new Image();
     image.src = url;
     image.addEventListener("load", function () {
       // Now that the image has loaded make copy it to the texture.
@@ -177,7 +153,10 @@ export class TEXTURE_MAP {
       );
 
       // Check if the image is a power of 2 in both dimensions.
-      if (((image.width & (image.width - 1)) === 0) && ((image.height & (image.height - 1)) === 0)) {
+      if (
+        (image.width & (image.width - 1)) === 0 &&
+        (image.height & (image.height - 1)) === 0
+      ) {
         // Yes, it's a power of 2. Generate mips.
         gl.generateMipmap(gl.TEXTURE_2D);
       } else {
