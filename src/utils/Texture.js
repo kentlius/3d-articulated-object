@@ -2,9 +2,9 @@ import { isPowerOf2 } from "./helper.js";
 
 export function toTextureMode(texture) {
   switch (texture) {
-    case "IMAGE":
+    case "CUSTOM":
       return 0;
-    case "ENVIRONMENT":
+    case "REFLECTIVE":
       return 1;
     case "BUMP":
       return 2;
@@ -16,9 +16,9 @@ export function toTextureMode(texture) {
 export function fromTextureMode(mode) {
   switch (mode) {
     case 0:
-      return "IMAGE";
+      return "CUSTOM";
     case 1:
-      return "ENVIRONMENT";
+      return "REFLECTIVE";
     case 2:
       return "BUMP";
     default:
