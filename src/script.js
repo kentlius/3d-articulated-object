@@ -24,10 +24,16 @@ async function main() {
   const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
 
   let loadModel = person;
+  let articulatedObject = WebGLArticulatedObjectFactory(
+    loadModel.components[0],
+    gl,
+    program
+  );
   let component = 0;
   const tree = document.querySelector("#tree");
   const selected = document.querySelector("#selected");
   const projections = document.querySelectorAll("input[name='projection']");
+  const textures = document.querySelectorAll("input[name='texture']");
   const translateX = document.querySelector("#translateX");
   const translateY = document.querySelector("#translateY");
   const translateZ = document.querySelector("#translateZ");
@@ -39,11 +45,12 @@ async function main() {
   const scaleZ = document.querySelector("#scaleZ");
   const angle = document.querySelector("#angle");
   const radius = document.querySelector("#radius");
+  let isShading = true;
   const shading = document.querySelector("#shading");
   const reset = document.querySelector("#reset");
 
   const load = () => {
-    let articulatedObject = WebGLArticulatedObjectFactory(
+    articulatedObject = WebGLArticulatedObjectFactory(
       loadModel.components[0],
       gl,
       program
@@ -64,6 +71,25 @@ async function main() {
     scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
     scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
     scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
+    angle.value = (articulatedRenderer.cameraAngle * Math.PI) / 180;
+    radius.value = articulatedRenderer.cameraRadius;
+    shading.checked = articulatedRenderer.shadingMode;
+    articulatedRenderer.setProjection("ORTHOGRAPHIC");
+    projections.forEach((projection) => {
+      if (projection.value === "orthographic") {
+        projection.checked = true;
+      } else{
+        projection.checked = false;
+      }
+    });
+    textures.forEach((texture) => {
+      if (texture.value === "default") {
+        texture.checked = true;
+      } else{
+        texture.checked = false;
+      }
+    });
+    
     for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
       let button = document.querySelector("#AO-" + i);
       button.onclick = () => {
@@ -114,6 +140,16 @@ async function main() {
     });
   });
 
+  // Texture Radio Button Handler
+  textures.forEach((texture) => {
+    texture.addEventListener("change", (event) => {
+      // set texture for all components
+      for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
+        articulatedRenderer.object.getArticulatedObject(i).object.setTexture(event.target.value.toUpperCase());
+      }
+    });
+  });
+
   // Translation Slider Handlers
   translateX.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).translation[0] = translateX.value;
@@ -154,20 +190,16 @@ async function main() {
   });
 
   // View Angle Slider Handler
-  angle.value = (articulatedRenderer.cameraAngle * Math.PI) / 180;
   angle.addEventListener("input", () => {
     articulatedRenderer.cameraAngle = (angle.value * Math.PI) / 180;
   });
 
   // View Radius Slider Handler
-  radius.value = articulatedRenderer.cameraRadius;
   radius.addEventListener("input", () => {
     articulatedRenderer.cameraRadius = radius.value;
   });
 
   // Switch Shading
-  let isShading = true;
-  shading.checked = articulatedRenderer.shadingMode;
   shading.addEventListener("change", (event) => {
     if (!event.target.checked) {
       isShading = false;

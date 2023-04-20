@@ -50,5 +50,6 @@ export default class WebGLLocation {
       "u_texture_environment"
     );
     this.textureBump = this.gl.getUniformLocation(program, "u_texture_bump");
+    this.textureDefault = this.gl.getUniformLocation(program, "u_texture_default");
   }
 }

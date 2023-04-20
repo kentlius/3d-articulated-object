@@ -163,8 +163,9 @@ export default class WebGLObject {
     let imageTexture = TEXTURE_MAP.image(this.gl);
     let environmentTexture = TEXTURE_MAP.environment(this.gl);
     let bumpTexture = TEXTURE_MAP.bump(this.gl);
+    let defaultTexture = TEXTURE_MAP.default(this.gl, this.color);
 
-    this.textures = [imageTexture, environmentTexture, bumpTexture];
+    this.textures = [imageTexture, environmentTexture, bumpTexture, defaultTexture];
   }
 
   /**
@@ -433,6 +434,10 @@ export default class WebGLObject {
     this.gl.uniform1i(this.location.textureBump, 2);
     this.gl.activeTexture(this.gl.TEXTURE2);
     this.gl.bindTexture(this.gl.TEXTURE_2D, this.textures[2]);
+    // Texture default
+    this.gl.uniform1i(this.location.textureDefault, 3);
+    this.gl.activeTexture(this.gl.TEXTURE3);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, this.textures[3]);
   }
 
   /**

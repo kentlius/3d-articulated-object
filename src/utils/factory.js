@@ -24,7 +24,7 @@ export function WebGLArticulatedObjectFactory(articulatedModel, gl, program) {
     program
   );
   articulatedObject.object.scale = articulatedModel.scale;
-  articulatedObject.object.setTexture("ENVIRONMENT");
+  articulatedObject.object.setTexture("DEFAULT");
 
   //Set other properties
   articulatedObject.name = articulatedModel.id;

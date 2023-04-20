@@ -8,6 +8,8 @@ export function toTextureMode(texture) {
       return 1;
     case "BUMP":
       return 2;
+    case "DEFAULT":
+      return 3;
     default:
       return -1;
   }
@@ -21,6 +23,8 @@ export function fromTextureMode(mode) {
       return "ENVIRONMENT";
     case 2:
       return "BUMP";
+    case 3:
+      return "DEFAULT";
     default:
       return "NONE";
   }
@@ -133,6 +137,30 @@ export class TEXTURE_MAP {
     const url = "./textures/bump.png";
     return TEXTURE_MAP.loadTexture2D(gl, url);
   }
+
+  /**
+   * Use and create an environment map texture.
+   *
+   * @param gl - The WebGL context.
+   * @returns - The texture.
+   */
+  static default(gl, color) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGBA,
+      1,
+      1,
+      0,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      new Uint8Array([0, 0, 255, 255])
+    );
+    return texture;
+  }
+
 
   /**
    * Load the texture 2D from the url and create a WebGLTexture.

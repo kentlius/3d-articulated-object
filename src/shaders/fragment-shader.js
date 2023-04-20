@@ -27,6 +27,7 @@ varying vec4 v_color;
 uniform sampler2D u_texture_image;
 uniform samplerCube u_texture_environment;
 uniform sampler2D u_texture_bump;
+uniform sampler2D u_texture_default;
 
 // All variables for Bump Mapping
 varying mat3 v_tbn;
@@ -66,6 +67,9 @@ void main() {
       float diffuse = max(dot(lightDir, norm), 0.0);
 
       gl_FragColor = vec4(diffuse * albedo + ambient, 1.0);
+   } else if(u_textureMode == 3) {
+      // only use the texture color
+      gl_FragColor = texture2D(u_texture_default, v_textureCoord);
    }
 
    // Set the shading.
