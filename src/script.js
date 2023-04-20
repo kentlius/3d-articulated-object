@@ -3,7 +3,10 @@ import { vertexShaderSource } from "./shaders/vertex-shader.js";
 import { createShader, createProgram } from "./utils/webgl-utils.js";
 import { WebGLArticulatedObjectFactory } from "./utils/factory.js";
 import { WebGLArticulatedRenderer } from "./utils/WebGLArticulatedRenderer.js";
-import model from "../test/model.json" assert { type: "json" };
+import person from "../test/model.json" assert { type: "json" };
+import ghast from "../test/ghast.json" assert { type: "json" };
+import snow_golem from "../test/snow_golem.json" assert { type: "json" };
+import sheep from "../test/sheep.json" assert { type: "json" };
 
 async function main() {
   const canvas = document.querySelector("#canvas");
@@ -16,36 +19,95 @@ async function main() {
   }
 
   const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-  // prettier-ignore
   const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-
   const program = createProgram(gl, vertexShader, fragmentShader);
-  const defaultArticulatedObject = WebGLArticulatedObjectFactory(
-    model.components[0],
-    gl,
-    program
-  );
   const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
-  articulatedRenderer.setObject(defaultArticulatedObject);
-  requestAnimationFrame(
-    articulatedRenderer.drawScene.bind(articulatedRenderer)
-  );
-  //Create Tree
-  const tree = document.querySelector("#tree");
-  tree.innerHTML = articulatedRenderer.object.getUI(0, 0);
+
+  let loadModel = person;
   let component = 0;
-  let selected = document.querySelector("#selected");
-  selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(0).name;
-  for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
-    let button = document.querySelector("#AO-" + i);
-    button.onclick = () => {
-      component = i;
-      selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
+  const tree = document.querySelector("#tree");
+  const selected = document.querySelector("#selected");
+  const projections = document.querySelectorAll("input[name='projection']");
+  const translateX = document.querySelector("#translateX");
+  const translateY = document.querySelector("#translateY");
+  const translateZ = document.querySelector("#translateZ");
+  const rotateX = document.querySelector("#rotateX");
+  const rotateY = document.querySelector("#rotateY");
+  const rotateZ = document.querySelector("#rotateZ");
+  const scaleX = document.querySelector("#scaleX");
+  const scaleY = document.querySelector("#scaleY");
+  const scaleZ = document.querySelector("#scaleZ");
+  const angle = document.querySelector("#angle");
+  const radius = document.querySelector("#radius");
+  const shading = document.querySelector("#shading");
+  const reset = document.querySelector("#reset");
+
+  const load = () => {
+    let articulatedObject = WebGLArticulatedObjectFactory(
+      loadModel.components[0],
+      gl,
+      program
+    );
+    articulatedRenderer.setObject(articulatedObject);
+    requestAnimationFrame(
+      articulatedRenderer.drawScene.bind(articulatedRenderer)
+    );
+    tree.innerHTML = articulatedRenderer.object.getUI(0, 0);
+    component = 0;
+    selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
+    translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
+    translateY.value = articulatedRenderer.object.getArticulatedObject(component).translation[1];
+    translateZ.value = articulatedRenderer.object.getArticulatedObject(component).translation[2];
+    rotateX.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
+    rotateY.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
+    rotateZ.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
+    scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
+    scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
+    scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
+    for (let i = 0; i < articulatedRenderer.object.getNumObj(); i++) {
+      let button = document.querySelector("#AO-" + i);
+      button.onclick = () => {
+        component = i;
+        selected.innerHTML = "Selected Component: " + articulatedRenderer.object.getArticulatedObject(component).name;
+        translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
+        translateY.value = articulatedRenderer.object.getArticulatedObject(component).translation[1];
+        translateZ.value = articulatedRenderer.object.getArticulatedObject(component).translation[2];
+        rotateX.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
+        rotateY.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
+        rotateZ.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
+        scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
+        scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
+        scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
+      }
     }
-  }
+  };
+
+  // load default model
+  load();
+
+  //change model
+  const models = document.querySelectorAll("input[name='model']");
+  models.forEach((model) => {
+    model.addEventListener("change", (event) => {
+      switch (event.target.value) {
+        case "ghast":
+          loadModel = ghast;
+          break;
+        case "sheep":
+          loadModel = sheep;
+          break;
+        case "snow_golem":
+          loadModel = snow_golem;
+          break;
+        default:
+          loadModel = person;
+      }
+      load();
+    });
+  });
+
 
   // Projection Radio Button Handler
-  const projections = document.querySelectorAll("input[name='projection']");
   projections.forEach((projection) => {
     projection.addEventListener("change", (event) => {
       articulatedRenderer.setProjection(event.target.value.toUpperCase());
@@ -53,78 +115,57 @@ async function main() {
   });
 
   // Translation Slider Handlers
-  const translateX = document.querySelector("#translateX");
-  translateX.value = articulatedRenderer.object.getArticulatedObject(component).translation[0];
   translateX.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).translation[0] = translateX.value;
   });
 
-  const translateY = document.querySelector("#translateY");
-  translateY.value = articulatedRenderer.object.getArticulatedObject(component).translation[1];
   translateY.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).translation[1] = translateY.value;
   });
 
-  const translateZ = document.querySelector("#translateZ");
-  translateZ.value = articulatedRenderer.object.getArticulatedObject(component).translation[2];
   translateZ.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).translation[2] = translateZ.value;
   });
 
   // Rotation Slider Handlers
-  const rotateX = document.querySelector("#rotateX");
-  rotateX.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[0] * Math.PI) / 180;
   rotateX.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).rotation[0] = (rotateX.value * Math.PI) / 180;
   });
 
-  const rotateY = document.querySelector("#rotateY");
-  rotateY.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[1] * Math.PI) / 180;
   rotateY.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).rotation[1] = (rotateY.value * Math.PI) / 180;
   });
 
-  const rotateZ = document.querySelector("#rotateZ");
-  rotateZ.value = (articulatedRenderer.object.getArticulatedObject(component).rotation[2] * Math.PI) / 180;
   rotateZ.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).rotation[2] = (rotateZ.value * Math.PI) / 180;
   });
 
   // Scale Slider Handlers
-  const scaleX = document.querySelector("#scaleX");
-  scaleX.value = articulatedRenderer.object.getArticulatedObject(component).scale[0];
   scaleX.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).scale[0] = scaleX.value;
   });
 
-  const scaleY = document.querySelector("#scaleY");
-  scaleY.value = articulatedRenderer.object.getArticulatedObject(component).scale[1];
   scaleY.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).scale[1] = scaleY.value;
   });
 
-  const scaleZ = document.querySelector("#scaleZ");
-  scaleZ.value = articulatedRenderer.object.getArticulatedObject(component).scale[2];
   scaleZ.addEventListener("input", () => {
     articulatedRenderer.object.getArticulatedObject(component).scale[2] = scaleZ.value;
   });
 
   // View Angle Slider Handler
-  const angle = document.querySelector("#angle");
   angle.value = (articulatedRenderer.cameraAngle * Math.PI) / 180;
   angle.addEventListener("input", () => {
     articulatedRenderer.cameraAngle = (angle.value * Math.PI) / 180;
   });
 
   // View Radius Slider Handler
-  const radius = document.querySelector("#radius");
   radius.value = articulatedRenderer.cameraRadius;
   radius.addEventListener("input", () => {
     articulatedRenderer.cameraRadius = radius.value;
   });
 
   // Switch Shading
-  const shading = document.querySelector("#shading");
   let isShading = true;
   shading.checked = articulatedRenderer.shadingMode;
   shading.addEventListener("change", (event) => {
@@ -134,6 +175,11 @@ async function main() {
       isShading = true;
     }
     articulatedRenderer.shadingMode = isShading;
+  });
+
+  // Reset
+  reset.addEventListener("click", () => {
+    load();
   });
 
   // const position = gl.getAttribLocation(program, "a_position");

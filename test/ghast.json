@@ -1,0 +1,142 @@
+{
+    "components": [
+      {
+        "id": "head",
+        "color": "#000000",
+        "texture": "textures/bump.png",
+        "coordinates": [0, 50, 0],
+        "rotation": [15, 240, 0],
+        "scale": [1, 1, 1],
+        "children": [
+          {
+            "id": "leg_right_front",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [80, -150, 80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 0.6, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_right_center",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [80, -150, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_right_back",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [80, -150, -80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 0.6, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_center_front",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [0, -150, 80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_center_center",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [0, -150, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_center_back",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [0, -150, -80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_left_front",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [-80, -150, 80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_left_center",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [-80, -150, 0],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          },
+          {
+            "id": "leg_left_back",
+            "color": "#000000",
+            "texture": "textures/bump.png",
+            "coordinates": [-80, -150, -80],
+            "rotation": [0, 0, 0],
+            "scale": [0.1, 1.2, 0.1],
+            "children": []
+          }
+        ]
+      }
+    ],
+    "animations": [
+        {
+          "name": "walk",
+          "duration": 1000,
+          "keyframes": [
+            {
+              "time": 0,
+              "transforms": [
+                {
+                  "component": "left_leg",
+                  "rotation": [0, 0, 0]
+                },
+                {
+                  "component": "right_leg",
+                  "rotation": [0, 0, 0]
+                }
+              ]
+            },
+            {
+              "time": 500,
+              "transforms": [
+                {
+                  "component": "left_leg",
+                  "rotation": [0, 0, 45]
+                },
+                {
+                  "component": "right_leg",
+                  "rotation": [0, 0, 135]
+                }
+              ]
+            },
+            {
+              "time": 1000,
+              "transforms": [
+                {
+                  "component": "left_leg",
+                  "rotation": [0, 0, 0]
+                },
+                {
+                  "component": "right_leg",
+                  "rotation": [0, 0, 0]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+  }
