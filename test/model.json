@@ -3,7 +3,7 @@
     {
       "id": "base",
       "color": "#FFFFFF",
-      "texture": "textures/bump.png",
+      "texture": "BUMP",
       "coordinates": [0, 0, 0],
       "rotation": [0, 0, 0],
       "scale": [1, 1, 0.6],
@@ -11,7 +11,7 @@
         {
           "id": "head",
           "color": "#FF0000",
-          "texture": "textures/bump.png",
+          "texture": "BUMP",
           "coordinates": [0, 125, 0],
           "rotation": [0, 0, 0],
           "scale": [0.5, 0.5, 0.5],
@@ -20,7 +20,7 @@
         {
           "id": "right_arm",
           "color": "#FF0000",
-          "texture": "textures/bump.png",
+          "texture": "BUMP",
           "coordinates": [130, 50, 0],
           "rotation": [0, 0, 0],
           "scale": [0.3, 0.6, 0.3],
@@ -28,11 +28,7 @@
             {
               "id": "right_hand",
               "color": "#00FF00",
-              "texture": {
-                "bump": null,
-                "reflective": true,
-                "custom": null
-              },
+              "texture": "BUMP",
               "coordinates": [0, -130, 0],
               "rotation": [0, 0, 0],
               "scale": [0.2, 0.8, 0.2],
@@ -43,7 +39,7 @@
         {
           "id": "left_arm",
           "color": "#FF0000",
-          "texture": "textures/bump.png",
+          "texture": "BUMP",
           "coordinates": [-130, 50, 0],
           "rotation": [0, 0, 0],
           "scale": [0.3, 0.6, 0.3],
@@ -51,11 +47,7 @@
             {
               "id": "left_hand",
               "color": "#00FF00",
-              "texture": {
-                "bump": null,
-                "reflective": true,
-                "custom": null
-              },
+              "texture": "BUMP",
               "coordinates": [0, -130, 0],
               "rotation": [0, 0, 0],
               "scale": [0.2, 0.8, 0.2],
@@ -66,7 +58,7 @@
         {
           "id": "right_leg",
           "color": "#0000FF",
-          "texture": "textures/bump.png",
+          "texture": "BUMP",
           "coordinates": [50, -150, 0],
           "rotation": [0, 0, 0],
           "scale": [0.4, 1, 0.4],
@@ -75,7 +67,7 @@
         {
           "id": "left_leg",
           "color": "#0000FF",
-          "texture": "textures/bump.png",
+          "texture": "BUMP",
           "coordinates": [-50, -150, 0],
           "rotation": [0, 0, 0],
           "scale": [0.4, 1, 0.4],

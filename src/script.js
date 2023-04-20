@@ -1,12 +1,13 @@
 import { fragmentShaderSource } from "./shaders/fragment-shader.js";
 import { vertexShaderSource } from "./shaders/vertex-shader.js";
 import { createShader, createProgram } from "./utils/webgl-utils.js";
-import { WebGLArticulatedObjectFactory } from "./utils/factory.js";
+import { WebGLArticulatedObjectFactory, AnimationFactory } from "./utils/factory.js";
 import { WebGLArticulatedRenderer } from "./utils/WebGLArticulatedRenderer.js";
 import person from "../test/model.json" assert { type: "json" };
 import ghast from "../test/ghast.json" assert { type: "json" };
 import snow_golem from "../test/snow_golem.json" assert { type: "json" };
 import sheep from "../test/sheep.json" assert { type: "json" };
+import { ManFlexing } from "../test/animations/person-anim.js";
 
 async function main() {
   const canvas = document.querySelector("#canvas");
@@ -132,7 +133,6 @@ async function main() {
     });
   });
 
-
   // Projection Radio Button Handler
   projections.forEach((projection) => {
     projection.addEventListener("change", (event) => {
@@ -213,6 +213,46 @@ async function main() {
   reset.addEventListener("click", () => {
     load();
   });
+
+  // ANIMATION WIP
+  let shutterSpeed = 0.5;
+  const defaultAnimationModel = ManFlexing;
+  let animation = AnimationFactory(defaultAnimationModel);
+  let isPlayed = false;
+
+  const playButton = document.querySelector("#play-button");
+  const pauseButton = document.querySelector("#pause-button");
+  playButton.disabled = isPlayed;
+  pauseButton.disabled = !isPlayed;
+
+  playButton.onclick = () => {
+    isPlayed = true;
+    playButton.disabled = isPlayed;
+    pauseButton.disabled = !isPlayed;
+  };
+
+  pauseButton.onclick = () => {
+    isPlayed = false;
+    playButton.disabled = isPlayed;
+    pauseButton.disabled = !isPlayed;
+  };
+
+  //Buat timer
+  let globalTimer = 0;
+  setInterval(function () {
+    globalTimer++;
+    if (isPlayed) {
+      if (globalTimer % Math.round(shutterSpeed * 10) == 0) {
+        animation.curFrame = Math.min(
+          animation.frames.length - 1,
+          animation.curFrame + 1
+        );
+        articulatedRenderer.object.applyFrame(
+          animation.frames[animation.curFrame]
+        );
+      }
+    }
+  }, 100);
 
   // const position = gl.getAttribLocation(program, "a_position");
   // const color = gl.getAttribLocation(program, "a_color");

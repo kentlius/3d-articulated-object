@@ -19,7 +19,6 @@ varying vec3 v_viewModelPosition;
 varying vec3 v_worldNormal;
 varying vec2 v_textureCoord;
 
-// All variables for Bump Mapping
 varying mat3 v_tbn;
 
 mat3 transpose(in mat3 inMatrix) {
@@ -33,26 +32,19 @@ mat3 transpose(in mat3 inMatrix) {
 }
 
 void main() {
-  // View model matrix.
   mat4 viewModelMatrix = u_viewMatrix * u_modelMatrix;
 
-  // Multiply the position by the matrix.
   gl_Position = u_projectionMatrix * viewModelMatrix * a_position;
 
-  // send the view position to the fragment shader
   v_modelPosition = vec3(u_modelMatrix * a_position);
   v_viewModelPosition = vec3(viewModelMatrix * a_position);
 
-  // orient the normals and pass to the fragment shader
   v_worldNormal = mat3(u_modelMatrix) * a_normal;
 
-  // Pass the color to the fragment shader.
   v_color = a_color;
 
-  // Pass the texcoord to the fragment shader.
   v_textureCoord = a_textureCoord;
 
-  // Bump mapping variables. 
   vec3 t = normalize(mat3(u_normalMatrix) * a_tangent);
   vec3 b = normalize(mat3(u_normalMatrix) * a_bitangent);
   vec3 n = normalize(mat3(u_normalMatrix) * a_normal);
