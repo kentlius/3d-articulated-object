@@ -1,12 +1,12 @@
 import { fragmentShaderSource } from "./shaders/fragment-shader.js";
 import { vertexShaderSource } from "./shaders/vertex-shader.js";
-import { createShader, createProgram } from "./utils/webgl-utils.js";
-import { WebGLArticulatedObjectFactory } from "./utils/factory.js";
-import { WebGLArticulatedRenderer } from "./utils/WebGLArticulatedRenderer.js";
+import { ArticulatedObjectRenderer } from "./utils/ArticulatedObjectRenderer.js";
 import person from "../test/model.json" assert { type: "json" };
 import ghast from "../test/ghast.json" assert { type: "json" };
 import snow_golem from "../test/snow_golem.json" assert { type: "json" };
 import sheep from "../test/sheep.json" assert { type: "json" };
+import ArticulatedObject from "./utils/ArticulatedObject.js";
+import { createShader, createProgram } from "./utils/utility.js";
 
 async function main() {
   const canvas = document.querySelector("#canvas");
@@ -24,7 +24,7 @@ async function main() {
 
   let loadModel = person;
   let articulatedObject;
-  const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
+  const articulatedRenderer = new ArticulatedObjectRenderer(gl, program);
 
   let component = 0;
   const tree = document.querySelector("#tree");
@@ -48,10 +48,10 @@ async function main() {
   const reset = document.querySelector("#reset");
 
   const load = () => {
-    articulatedObject = WebGLArticulatedObjectFactory(
-      loadModel.components[0],
+    articulatedObject = new ArticulatedObject(
       gl,
-      program
+      program,
+      loadModel.components[0]
     );
     articulatedRenderer.setObject(articulatedObject);
     articulatedRenderer.setAnimation(loadModel.animations[0]);

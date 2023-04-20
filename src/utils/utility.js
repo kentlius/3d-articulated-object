@@ -64,24 +64,72 @@ function getVectors(vertices) {
   };
 }
 
-// Get the all vector normals of the edge beam object
-function getNormalVector(vPosition) {
-  const n = vPosition.length;
-  var vNormals = [];
-  for (let i = 0; i < n; i += 18) {
-    const p1 = [vPosition[i], vPosition[i + 1], vPosition[i + 2]];
-    const p2 = [vPosition[i + 3], vPosition[i + 4], vPosition[i + 5]];
-    const p3 = [vPosition[i + 6], vPosition[i + 7], vPosition[i + 8]];
-    const vec1 = subtractVectors(p2, p1);
-    const vec2 = subtractVectors(p3, p1);
-    const normalDirection = cross(vec1, vec2);
-    const vecNormal = normalize(normalDirection);
-    for (let j = 0; j < 6; j++) {
-      vNormals = vNormals.concat(vecNormal);
-    }
+function interpolateRotation(
+  prevRotation,
+  nextRotation,
+  prevTime,
+  nextTime,
+  currentTime
+) {
+  if (prevRotation === null) {
+    return nextRotation;
+  } else if (nextRotation === null) {
+    return prevRotation;
+  } else {
+    const t = (currentTime - prevTime) / (nextTime - prevTime);
+    return [
+      prevRotation[0] * (1 - t) + nextRotation[0] * t,
+      prevRotation[1] * (1 - t) + nextRotation[1] * t,
+      prevRotation[2] * (1 - t) + nextRotation[2] * t,
+    ];
+  }
+}
+function createShader(gl, type, source) {
+  const shader = gl.createShader(type);
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+  if (success) {
+    return shader;
   }
 
-  return vNormals;
+  console.log(gl.getShaderInfoLog(shader));
+  gl.deleteShader(shader);
 }
 
-export { subtractVectors, normalize, cross, getVectors, getNormalVector };
+function createProgram(gl, vertexShader, fragmentShader) {
+  const program = gl.createProgram();
+  gl.attachShader(program, vertexShader);
+  gl.attachShader(program, fragmentShader);
+  gl.linkProgram(program);
+  const success = gl.getProgramParameter(program, gl.LINK_STATUS);
+  if (success) {
+    return program;
+  }
+
+  console.log(gl.getProgramInfoLog(program));
+  gl.deleteProgram(program);
+}
+
+function resizeCanvasToDisplaySize(canvas, multiplier) {
+  multiplier = multiplier || 1;
+  const width = (canvas.clientWidth * multiplier) | 0;
+  const height = (canvas.clientHeight * multiplier) | 0;
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+    return true;
+  }
+  return false;
+}
+
+export { 
+  subtractVectors, 
+  normalize, 
+  cross, 
+  getVectors, 
+  interpolateRotation,
+  createProgram,
+  createShader,
+  resizeCanvasToDisplaySize
+};

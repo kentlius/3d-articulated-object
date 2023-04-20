@@ -1,13 +1,13 @@
-import { resizeCanvasToDisplaySize } from "./webgl-utils.js";
 import { Matrix4 } from "./matrix.js";
+import { interpolateRotation, resizeCanvasToDisplaySize } from "./utility.js";
 
-export class WebGLArticulatedRenderer {
+export class ArticulatedObjectRenderer {
   constructor(gl, program) {
     this._gl = gl;
     this._program = program;
     this.setProjection("ORTHOGRAPHIC");
   }
-
+  
   setObject(object) {
     this.object = object;
     this.cameraAngle = (0 * Math.PI) / 180;
@@ -22,7 +22,7 @@ export class WebGLArticulatedRenderer {
   }
 
   setProjection(projection) {
-    // Orthographic projection parameters.
+    // For orthographic projection.
     const left = 0;
     const right = this._gl.canvas.clientWidth;
     const bottom = 0;
@@ -30,13 +30,13 @@ export class WebGLArticulatedRenderer {
     const near = 850;
     const far = -850;
 
-    // Perspective projection parameters.
+    // For perspective projection.
     const fov = (60 * Math.PI) / 180;
     const aspect = this._gl.canvas.clientWidth / this._gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 2000;
-
-    // Oblique projection parameters.
+    
+    // For oblique projection.
     const theta = 45;
     const phi = 45;
 
@@ -52,59 +52,51 @@ export class WebGLArticulatedRenderer {
         );
         break;
       case "PERSPECTIVE":
-        this.projectionMatrix = Matrix4.perspective(fov, aspect, zNear, zFar);
+        this.projectionMatrix = Matrix4.perspective(
+          fov, 
+          aspect, 
+          zNear, 
+          zFar
+        );
         break;
       default:
-        const ortho = Matrix4.orthographic(left, right, bottom, top, near, far);
-        const oblique = Matrix4.oblique(-theta, -phi);
+        const ortho = Matrix4.orthographic(
+          left, 
+          right, 
+          bottom, 
+          top, 
+          near, 
+          far
+        );
+        const oblique = Matrix4.oblique(
+          -theta, 
+          -phi
+        );
+
         oblique.multiply(ortho);
-
-        // Center the object
         oblique.translate(0, 0, 500);
-
         this.projectionMatrix = oblique;
         break;
     }
   }
 
-  drawScene(now) {
-    // Convert to seconds
-    now *= 0.001;
-    // Subtract the previous time from the current time
-    var deltaTime = now - this.then;
-    // Remember the current time for the next frame.
-    this.then = now;
-
-    // Resize the canvas to fit the window.
+  drawScene() {
+    // setup canvas
     resizeCanvasToDisplaySize(this._gl.canvas);
-
-    // Tell WebGL how to convert from clip space to pixels
     this._gl.viewport(0, 0, this._gl.canvas.width, this._gl.canvas.height);
-
-    // Clear the canvas.
     this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
-
-    // Turn on culling. By default backfacing triangles
-    // will be culled.
     this._gl.enable(this._gl.CULL_FACE);
-
-    // Enable the depth buffer
     this._gl.enable(this._gl.DEPTH_TEST);
 
-    // Check if the object is defined.
     if (!this.object) {
       return;
     }
 
-    // Get the projection matrix.
+    // setup camera according to the current projection
     const projectionMatrix = this.projectionMatrix.clone();
-
-    // Use matrix math to compute a position on a circle where the camera is
     let cameraMatrix = Matrix4.identity();
     cameraMatrix.rotateY(this.cameraAngle);
     cameraMatrix.translate(0, 0, this.cameraRadius);
-
-    // Get the camera's position from the matrix we computed
     var cameraPosition = [
       cameraMatrix.get(3, 0),
       cameraMatrix.get(3, 1),
@@ -112,19 +104,21 @@ export class WebGLArticulatedRenderer {
     ];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
-
-    // Compute the camera's matrix using look at.
     cameraMatrix = Matrix4.lookAt(cameraPosition, target, up);
 
-    // Make a view matrix from the camera matrix
+    //  create view matrix
     const viewMatrix = cameraMatrix.clone().inverse();
 
     // Animate the object.
     if (this.animation !== undefined && this.animate) {
       this.currentTime += 1 / 60;
+
+      // loop to the start of animation
       if (this.currentTime > this.animation.duration) {
-        this.currentTime = 0; // loop back to the start of the animation
+        this.currentTime = 0;
       }
+
+      // load keyframes
       let prevKeyframe = null;
       let nextKeyframe = null;
       for (let keyframe of this.animation.keyframes) {
@@ -135,27 +129,7 @@ export class WebGLArticulatedRenderer {
         }
       }
 
-      function interpolateRotation(
-        prevRotation,
-        nextRotation,
-        prevTime,
-        nextTime,
-        currentTime
-      ) {
-        if (prevRotation === null) {
-          return nextRotation;
-        } else if (nextRotation === null) {
-          return prevRotation;
-        } else {
-          const t = (currentTime - prevTime) / (nextTime - prevTime);
-          return [
-            prevRotation[0] * (1 - t) + nextRotation[0] * t,
-            prevRotation[1] * (1 - t) + nextRotation[1] * t,
-            prevRotation[2] * (1 - t) + nextRotation[2] * t,
-          ];
-        }
-      }
-
+      // load transformations
       for (let transform of prevKeyframe.transforms) {
         const component = this.object.getArticulatedObjectByName(
           transform.component
@@ -170,7 +144,6 @@ export class WebGLArticulatedRenderer {
             nextRotation = nextTransform.rotation;
           }
         }
-
         const rotation = interpolateRotation(
           prevRotation,
           nextRotation,

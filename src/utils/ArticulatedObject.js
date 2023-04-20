@@ -13,6 +13,22 @@ export default class ArticulatedObject {
     this.gl = gl;
     this.program = program;
     this.object = new Object(gl, program, articulatedModel.object);
+
+    this.object.scale = articulatedModel.scale;
+    this.object.setTexture(articulatedModel.texture);
+
+    //Set other properties
+    this.name = articulatedModel.id;
+    this.translation = articulatedModel.coordinates;
+    this.rotation = articulatedModel.rotation.map((x) => x*Math.PI/180);
+    this.scale = [1, 1, 1];
+
+    //Set children
+    for (let i = 0; i < articulatedModel.children.length; i++) {
+      this.children.push(
+        new ArticulatedObject(gl, program, articulatedModel.children[i])
+      );
+    }
   }
 
   draw(projection, view, model, cameraPosition, shadingMode) {
@@ -86,7 +102,7 @@ export default class ArticulatedObject {
   }
 
   applyFrame(frame, idx = 0) {
-    //Applying transformations, deep copy
+    //Apply transformation to object
     this.translation = frame.transformations[idx].tr_subtr.map((e) => e);
     this.rotation = frame.transformations[idx].rot_subtr.map(
       (x) => (x * Math.PI) / 180
@@ -94,7 +110,7 @@ export default class ArticulatedObject {
     this.scale = frame.transformations[idx].scale_subtr.map((e) => e);
     idx++;
 
-    //Applying frame to children
+    //Apply transformation to children
     for (let i = 0; i < this.children.length; i++) {
       this.children[i].applyFrame(frame, idx);
       idx += this.children[i].getTotalObj();
