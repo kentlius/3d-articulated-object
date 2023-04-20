@@ -57,6 +57,7 @@ async function main() {
       program
     );
     articulatedRenderer.setObject(articulatedObject);
+    articulatedRenderer.setAnimation(loadModel.animations[0]);
     requestAnimationFrame(
       articulatedRenderer.drawScene.bind(articulatedRenderer)
     );

@@ -10,9 +10,14 @@ export class WebGLArticulatedRenderer {
 
   setObject(object) {
     this.object = object;
-    this.cameraAngle = 0 * Math.PI / 180;
+    this.cameraAngle = (0 * Math.PI) / 180;
     this.cameraRadius = 500;
     this.shadingMode = false;
+  }
+
+  setAnimation(animation) {
+    this.animation = animation;
+    this.currentTime = 0;
   }
 
   setProjection(projection) {
@@ -25,7 +30,7 @@ export class WebGLArticulatedRenderer {
     const far = -850;
 
     // Perspective projection parameters.
-    const fov = 60 * Math.PI / 180;
+    const fov = (60 * Math.PI) / 180;
     const aspect = this._gl.canvas.clientWidth / this._gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 2000;
@@ -112,6 +117,67 @@ export class WebGLArticulatedRenderer {
 
     // Make a view matrix from the camera matrix
     const viewMatrix = cameraMatrix.clone().inverse();
+
+    // Animate the object.
+    this.currentTime += 1 / 60;
+    if (this.currentTime > this.animation.duration) {
+      this.currentTime = 0; // loop back to the start of the animation
+    }
+    let prevKeyframe = null;
+    let nextKeyframe = null;
+    for (let keyframe of this.animation.keyframes) {
+      if (keyframe.time <= this.currentTime) {
+        prevKeyframe = keyframe;
+      } else if (nextKeyframe === null || keyframe.time < nextKeyframe.time) {
+        nextKeyframe = keyframe;
+      }
+    }
+
+    function interpolateRotation(
+      prevRotation,
+      nextRotation,
+      prevTime,
+      nextTime,
+      currentTime
+    ) {
+      if (prevRotation === null) {
+        return nextRotation;
+      } else if (nextRotation === null) {
+        return prevRotation;
+      } else {
+        const t = (currentTime - prevTime) / (nextTime - prevTime);
+        return [
+          prevRotation[0] * (1 - t) + nextRotation[0] * t,
+          prevRotation[1] * (1 - t) + nextRotation[1] * t,
+          prevRotation[2] * (1 - t) + nextRotation[2] * t,
+        ];
+      }
+    }
+
+    for (let transform of prevKeyframe.transforms) {
+      const component = this.object.getArticulatedObjectByName(
+        transform.component
+      );
+      const prevRotation = transform.rotation;
+      let nextRotation = null;
+      if (nextKeyframe !== null) {
+        const nextTransform = nextKeyframe.transforms.find(
+          (t) => t.component === transform.component
+        );
+        if (nextTransform !== undefined) {
+          nextRotation = nextTransform.rotation;
+        }
+      }
+
+      const rotation = interpolateRotation(
+        prevRotation,
+        nextRotation,
+        prevKeyframe.time,
+        nextKeyframe.time,
+        this.currentTime
+      );
+      component.rotation = rotation;
+    }
 
     // Draw the object.
     this.object.draw(

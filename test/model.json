@@ -79,7 +79,7 @@
   "animations": [
     {
       "name": "walk",
-      "duration": 1000,
+      "duration": 10,
       "keyframes": [
         {
           "time": 0,
@@ -95,20 +95,20 @@
           ]
         },
         {
-          "time": 500,
+          "time": 5,
           "transforms": [
             {
               "component": "left_leg",
-              "rotation": [0, 0, 45]
+              "rotation": [1, 0, 0]
             },
             {
               "component": "right_leg",
-              "rotation": [0, 0, 135]
+              "rotation": [-1, 0, 0]
             }
           ]
         },
         {
-          "time": 1000,
+          "time": 10,
           "transforms": [
             {
               "component": "left_leg",

@@ -68,6 +68,19 @@ export default class WebGLArticulatedObject {
     return null;
   }
 
+  getArticulatedObjectByName(name) {
+    if (this.name == name) {
+      return this;
+    }
+    for (let i = 0; i < this.children.length; i++) {
+      let returned = this.children[i].getArticulatedObjectByName(name);
+      if (returned != null) {
+        return returned;
+      }
+    }
+    return null;
+  }
+
   getNumObj() {
     let toReturn = 1;
     for (let i = 0; i < this.children.length; i++) {
@@ -79,7 +92,9 @@ export default class WebGLArticulatedObject {
   applyFrame(frame, idx = 0) {
     //Applying transformations, deep copy
     this.translation = frame.transformations[idx].tr_subtr.map((e) => e);
-    this.rotation = frame.transformations[idx].rot_subtr.map((x) => x*Math.PI/180);
+    this.rotation = frame.transformations[idx].rot_subtr.map(
+      (x) => (x * Math.PI) / 180
+    );
     this.scale = frame.transformations[idx].scale_subtr.map((e) => e);
     idx++;
 
@@ -94,7 +109,7 @@ export default class WebGLArticulatedObject {
     //Copying reference agar penggantian di UI juga mengganti frame
     let toAdd = new Transformation();
     toAdd.tr_subtr = this.translation;
-    toAdd.rot_subtr = this.rotation.map((x) => x*180/Math.PI);
+    toAdd.rot_subtr = this.rotation.map((x) => (x * 180) / Math.PI);
     toAdd.scale_subtr = this.scale;
     toReturn.transformations.push(toAdd);
 
