@@ -3,7 +3,7 @@ import { vertexShaderSource } from "./shaders/vertex-shader.js";
 import { createShader, createProgram } from "./utils/webgl-utils.js";
 import { WebGLArticulatedObjectFactory } from "./utils/factory.js";
 import { WebGLArticulatedRenderer } from "./utils/WebGLArticulatedRenderer.js";
-import person from "../test/model.json" assert { type: "json" };
+import steve from "../test/steve.json" assert { type: "json" };
 import ghast from "../test/ghast.json" assert { type: "json" };
 import snow_golem from "../test/snow_golem.json" assert { type: "json" };
 import sheep from "../test/sheep.json" assert { type: "json" };
@@ -23,7 +23,7 @@ async function main() {
   const program = createProgram(gl, vertexShader, fragmentShader);
   const articulatedRenderer = new WebGLArticulatedRenderer(gl, program);
 
-  let loadModel = person;
+  let loadModel = steve;
   let articulatedObject = WebGLArticulatedObjectFactory(
     loadModel.components[0],
     gl,
@@ -128,7 +128,7 @@ async function main() {
           loadModel = snow_golem;
           break;
         default:
-          loadModel = person;
+          loadModel = steve;
       }
       load();
     });

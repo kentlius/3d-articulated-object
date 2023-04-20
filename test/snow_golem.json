@@ -47,5 +47,52 @@
         }
       ]
     }
+  ],
+  "animations": [
+    {
+      "name": "hand_swing",
+      "duration": 10,
+      "keyframes": [
+        {
+          "time": 0,
+          "transforms": [
+            {
+              "component": "left_arm",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "right_arm",
+              "rotation": [0, 0, 0]
+            }
+          ]
+        },
+        {
+          "time": 5,
+          "transforms": [
+            {
+              "component": "left_arm",
+              "rotation": [1, 0, 0]
+            },
+            {
+              "component": "right_arm",
+              "rotation": [-1, 0, 0]
+            }
+          ]
+        },
+        {
+          "time": 10,
+          "transforms": [
+            {
+              "component": "left_arm",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "right_arm",
+              "rotation": [0, 0, 0]
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

@@ -99,44 +99,68 @@
   "animations": [
     {
       "name": "walk",
-      "duration": 1000,
+      "duration": 10,
       "keyframes": [
         {
           "time": 0,
           "transforms": [
             {
-              "component": "left_leg",
+              "component": "leg1_upper",
               "rotation": [0, 0, 0]
             },
             {
-              "component": "right_leg",
+              "component": "leg2_upper",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg3_upper",
+              "rotation": [0, 0, 0]
+            },
+            {
+              "component": "leg4_upper",
               "rotation": [0, 0, 0]
             }
           ]
         },
         {
-          "time": 500,
+          "time": 5,
           "transforms": [
             {
-              "component": "left_leg",
-              "rotation": [0, 0, 45]
+              "component": "leg1_upper",
+              "rotation": [1, 0, 0]
             },
             {
-              "component": "right_leg",
-              "rotation": [0, 0, 135]
+              "component": "leg2_upper",
+              "rotation": [-1, 0, 0]
+            },
+            {
+              "component": "leg3_upper",
+              "rotation": [1, 0, 0]
+            },
+            {
+              "component": "leg4_upper",
+              "rotation": [-1, 0, 0]
             }
           ]
         },
         {
-          "time": 1000,
+          "time": 10,
           "transforms": [
             {
-              "component": "left_leg",
-              "rotation": [0, 0, 0]
+              "component": "leg1_upper",
+              "rotation": [-1, 0, 0]
             },
             {
-              "component": "right_leg",
-              "rotation": [0, 0, 0]
+              "component": "leg2_upper",
+              "rotation": [1, 0, 0]
+            },
+            {
+              "component": "leg3_upper",
+              "rotation": [-1, 0, 0]
+            },
+            {
+              "component": "leg4_upper",
+              "rotation": [1, 0, 0]
             }
           ]
         }
